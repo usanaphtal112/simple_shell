@@ -16,4 +16,7 @@ void _putchar(char c);
 void print_error(char *msg);
 char *_getline(void);
 
+int _strcmp(const char *s1, const char *s2);
+void print_environment(void);
+
 #endif
