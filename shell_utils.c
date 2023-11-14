@@ -1,6 +1,43 @@
 #include "shell.h"
 
-#define READ_BUF_SIZE 1024
+/**
+ * _getline - Read a line from the standard input.
+ *
+ * Return: A dynamically allocated buffer containing the read line.
+ * The caller is responsible for freeing the memory using free().
+ */
+char *_getline(void)
+{
+	static char buffer[READ_BUF_SIZE];
+	static int bytes_read = 0;
+	char *result = NULL;
+
+	while (1)
+	{
+		int c = _getchar();
+
+		if (c == EOF || c == '\n')
+			break;
+		buffer[bytes_read++] = c;
+
+		if (bytes_read == READ_BUF_SIZE)
+		{
+			result = _strncat(result, buffer, READ_BUF_SIZE);
+			if (result == NULL)
+				return (NULL);
+			bytes_read = 0;
+
+		}
+	}
+
+	if (bytes_read > 0)
+	{
+		buffer[bytes_read] = '\0';
+		result = _strncat(result, buffer, bytes_read + 1);
+	}
+	
+	return (result);
+}
 
 /**
  * @brief Reads a command from the standard input using buffered input.
@@ -13,6 +50,7 @@
  * @return A dynamically allocated buffer containing the read command.
  * The caller is responsible for freeing the memory using free().
  */
+
 char *read_command(void)
 {
 	char buffer[READ_BUF_SIZE];

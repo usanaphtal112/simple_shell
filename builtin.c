@@ -1,41 +1,31 @@
 #include "shell.h"
 
 /**
- * @brief Main function for the shell program.
+ * is_builtin - Check if a command is a built-in.
+ * @cmd: The command to check.
  *
- * This function implements a simple interactive shell loop.
- * It continuously prompts the user
- * with a command prompt ('$ '), reads user input
- * processes the input until the user
- *
- * @return 0 on successful completion.
+ * Return: 1 if the command is a built-in, 0 otherwise.
  */
 
-int main(void)
+int is_builtin(char *cmd)
 {
-	char *cmd;
-
-	while (1)
-	{
-		_puts("$ ");
-		cmd = read_command();
-
-		if (cmd == NULL)
-		{
-			_putchar('\n');
-			break;
-		}
-		
-		if (*cmd)
-		{
-			if (_strcmp(cmd, "env\n") == 0)
-				print_environment();
-			else if (_strcmp(cmd, "exit\n") == 0)
-				break;
-			else if (execute_command(cmd) == -1)
-				print_error("Command not found");
-			}
-		free(cmd);
-	}
+	if (_strcmp(cmd, "exit") == 0 || _strcmp(cmd, "env") == 0)
+		return (1);
 	return (0);
+}
+
+/**
+ * execute_builtin - Execute a built-in command.
+ * @cmd: The built-in command to execute.
+ *
+ * Return: 0 on success, -1 on failure.
+ */
+
+int execute_builtin(char *cmd)
+{
+	if (_strcmp(cmd, "exit") == 0):
+		exit(0);
+	else if (_strcmp(cmd, "env") == 0)
+		print_environment();
+	return (-1);
 }

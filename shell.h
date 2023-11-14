@@ -1,6 +1,8 @@
 #ifndef SHELL_H
 #define SHELL_H
 
+#define READ_BUF_SIZE 1024
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -12,5 +14,6 @@ int execute_command(char *cmd);
 void _puts(char *str);
 void _putchar(char c);
 void print_error(char *msg);
+char *_getline(void);
 
 #endif
