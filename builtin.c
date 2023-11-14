@@ -23,7 +23,7 @@ int is_builtin(char *cmd)
 
 int execute_builtin(char *cmd)
 {
-	if (_strcmp(cmd, "exit") == 0):
+	if (_strcmp(cmd, "exit") == 0)
 		exit(0);
 	else if (_strcmp(cmd, "env") == 0)
 		print_environment();

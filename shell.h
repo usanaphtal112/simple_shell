@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 
 char *read_command(void);
+char **tokenize(char *str);
 int execute_command(char *cmd);
 void _puts(char *str);
 void _putchar(char c);
