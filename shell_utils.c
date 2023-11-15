@@ -1,6 +1,36 @@
 #include "shell.h"
 
 /**
+ * _getchar - Custom getchar function.
+ *
+ * This function reads a character from the standard input.
+ *
+ * Return: The character read or EOF on error.
+ */
+int _getchar(void)
+{
+	return getchar();
+}
+
+/**
+ * _strncat - Custom strncat function.
+ *
+ * This function appends the first `n` characters of the string `src`
+ * to the end of the string `dest`. The resulting string in `dest`
+ * is null-terminated.
+ *
+ * @param dest: The destination string.
+ * @param src: The source string.
+ * @param n: The maximum number of characters to append.
+ *
+ * Return: A pointer to the resulting string `dest`.
+ */
+char *_strncat(char *dest, const char *src, size_t n)
+{
+	return strncat(dest, src, n);
+}
+
+/**
  * _getline - Read a line from the standard input.
  *
  * Return: A dynamically allocated buffer containing the read line.
