@@ -27,7 +27,7 @@ extern char **environ;
  *
  * @var av An array of strings representing the
  * arguments passed to the shell.
- * @var input A string representing the input to the shell.
+ * @var main_input A string representing the main_input to the shell.
  * @var args An array of strings representing the parsed arguments.
  * @var status An integer representing the status of the shell.
  * @var counter An integer counter used for tracking.
@@ -47,6 +47,7 @@ typedef struct data
     char *pid;
 } simple_shell_d;
 
+typedef int BuiltinFunction(simple_shell_d *simpdata);
 /**
  * @struct sep_list
  * @brief Struct representing a list of separators.
@@ -108,10 +109,11 @@ typedef struct r_var_list
  * @var name A string representing the name of the built-in command.
  * @var f A function pointer to the function implementing the built-in command.
  */
+
 typedef struct builtin_s
 {
     char *name;
-    int (*f)(simple_shell_d *simpdata);
+    BuiltinFunction *function;
 } builtin_t;
 
 /*

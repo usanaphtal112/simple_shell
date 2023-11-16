@@ -29,5 +29,5 @@ int (*get_builtin(char *cmd))(simple_shell_d *)
             break;
     }
 
-    return (builtin[i].f);
+    return (builtin[i].function);
 }
