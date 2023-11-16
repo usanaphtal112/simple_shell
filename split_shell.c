@@ -106,38 +106,29 @@ char **split_line(char *main_input)
  */
 void go_next(sep_list **list_s, line_list **list_l, simple_shell_d *simpdata)
 {
-    int loop_sep;
-    sep_list *ls_s;
-    line_list *ls_l;
+    sep_list *ls_s = *list_s;
+    line_list *ls_l = *list_l;
 
-    loop_sep = 1;
-    ls_s = *list_s;
-    ls_l = *list_l;
-
-    while (ls_s != NULL && loop_sep)
+    while (ls_s != NULL)
     {
-        if (simpdata->status == 0)
+        if ((simpdata->status == 0 && (ls_s->separator == '&' || ls_s->separator == ';')) ||
+            (simpdata->status == 1 && (ls_s->separator == '|' || ls_s->separator == ';')))
         {
-            if (ls_s->separator == '&' || ls_s->separator == ';')
-                loop_sep = 0;
-            if (ls_s->separator == '|')
-                ls_l = ls_l->next, ls_s = ls_s->next;
+            break;
         }
-        else
+
+        if ((simpdata->status == 0 && ls_s->separator == '|') ||
+            (simpdata->status == 1 && ls_s->separator == '&'))
         {
-            if (ls_s->separator == '|' || ls_s->separator == ';')
-                loop_sep = 0;
-            if (ls_s->separator == '&')
-                ls_l = ls_l->next, ls_s = ls_s->next;
+            ls_l = ls_l->next;
         }
-        if (ls_s != NULL && !loop_sep)
-            ls_s = ls_s->next;
+
+        ls_s = ls_s->next;
     }
 
     *list_s = ls_s;
     *list_l = ls_l;
 }
-
 /**
  * @brief Splits and executes commands based on separators and operators.
  *
