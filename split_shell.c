@@ -15,38 +15,33 @@
  */
 char *swap_char(char *main_input, int bool)
 {
-    int i;
+    char swap_map[2][2] = {{'|', 16}, {'&', 12}};
 
-    if (bool == 0)
+    int i, j;
+
+    for (i = 0; main_input[i]; i++)
     {
-        for (i = 0; main_input[i]; i++)
+        for (j = 0; j < 2; j++)
         {
-            if (main_input[i] == '|')
+            if (bool == 0 && main_input[i] == swap_map[j][0])
             {
-                if (main_input[i + 1] != '|')
-                    main_input[i] = 16;
+                if (main_input[i + 1] != swap_map[j][0])
+                {
+                    main_input[i] = swap_map[j][1];
+                    if (swap_map[j][1] == 16)
+                        i++;
+                }
                 else
                     i++;
             }
-
-            if (main_input[i] == '&')
+            else if (bool == 1 && main_input[i] == swap_map[j][1])
             {
-                if (main_input[i + 1] != '&')
-                    main_input[i] = 12;
-                else
-                    i++;
+                main_input[i] = swap_map[j][0];
             }
         }
     }
-    else
-    {
-        for (i = 0; main_input[i]; i++)
-        {
-            main_input[i] = (main_input[i] == 16 ? '|' : main_input[i]);
-            main_input[i] = (main_input[i] == 12 ? '&' : main_input[i]);
-        }
-    }
-    return (main_input);
+
+    return main_input;
 }
 
 /**
