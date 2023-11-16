@@ -82,44 +82,38 @@ int cmp_chars(char str[], const char *delim)
  */
 char *_strtok(char str[], const char *delim)
 {
-    static char *splitted, *str_end;
-    char *str_start;
-    unsigned int i, bool;
+    static char *nextToken;
+    char *tokenStart;
 
     if (str != NULL)
     {
-        if (cmp_chars(str, delim))
-            return (NULL);
-        splitted = str;
-        i = _strlen(str);
-        str_end = &str[i];
+        nextToken = str;
     }
-    str_start = splitted;
-    if (str_start == str_end)
-        return (NULL);
 
-    for (bool = 0; *splitted; splitted++)
+    while (*nextToken && strchr(delim, *nextToken) != NULL)
     {
-        if (splitted != str_start)
-            if (*splitted && *(splitted - 1) == '\0')
-                break;
-
-        for (i = 0; delim[i]; i++)
-        {
-            if (*splitted == delim[i])
-            {
-                *splitted = '\0';
-                if (splitted == str_start)
-                    str_start++;
-                break;
-            }
-        }
-        if (bool == 0 && *splitted)
-            bool = 1;
+        nextToken++;
     }
-    if (bool == 0)
-        return (NULL);
-    return (str_start);
+
+    if (*nextToken == '\0')
+    {
+        return NULL;
+    }
+
+    tokenStart = nextToken;
+
+    while (*nextToken && strchr(delim, *nextToken) == NULL)
+    {
+        nextToken++;
+    }
+
+    if (*nextToken != '\0')
+    {
+        *nextToken = '\0';
+        nextToken++;
+    }
+
+    return tokenStart;
 }
 
 /**
@@ -134,12 +128,14 @@ char *_strtok(char str[], const char *delim)
  */
 int _isdigit(const char *s)
 {
-    unsigned int i;
-
-    for (i = 0; s[i]; i++)
+    while (*s)
     {
-        if (s[i] < 48 || s[i] > 57)
-            return (0);
+        if (*s < '0' || *s > '9')
+        {
+            return 0;
+        }
+        s++;
     }
-    return (1);
+
+    return 1;
 }
