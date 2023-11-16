@@ -194,28 +194,23 @@ int split_commands(simple_shell_d *simpdata, char *main_input)
  */
 void add_nodes(sep_list **head_s, line_list **head_l, char *main_input)
 {
-    int i;
-    char *line;
+    char *token;
+    char *rest = main_input;
 
-    main_input = swap_char(main_input, 0);
+    swap_char(main_input, 0);
 
-    for (i = 0; main_input[i]; i++)
+    while ((token = _strtok(rest, ";|&")) != NULL)
     {
-        if (main_input[i] == ';')
-            add_separation_end(head_s, main_input[i]);
-
-        if (main_input[i] == '|' || main_input[i] == '&')
-        {
-            add_separation_end(head_s, main_input[i]);
-            i++;
-        }
+        add_separation_end(head_s, token[0]);
+        rest = NULL;
     }
 
-    line = _strtok(main_input, ";|&");
-    do
+    rest = main_input;
+
+    while ((token = _strtok(rest, ";|&")) != NULL)
     {
-        line = swap_char(line, 1);
-        line_list_node(head_l, line);
-        line = _strtok(NULL, ";|&");
-    } while (line != NULL);
+        swap_char(token, 1);
+        line_list_node(head_l, token);
+        rest = NULL;
+    }
 }
