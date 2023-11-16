@@ -1,10 +1,10 @@
 #include "shell.h"
 
 /**
- * free_sep_list - Frees the memory allocated for sep_list.
+ * separation_list - Frees the memory allocated for sep_list.
  * @head: Pointer to the head of the sep_list.
  */
-void free_sep_list(sep_list **head)
+void separation_list(sep_list **head)
 {
     sep_list *temp;
     sep_list *curr;
@@ -22,10 +22,10 @@ void free_sep_list(sep_list **head)
 }
 
 /**
- * free_line_list - Frees the memory allocated for line_list.
+ * f_list - Frees the memory allocated for line_list.
  * @head: Pointer to the head of the line_list.
  */
-void free_line_list(line_list **head)
+void f_list(line_list **head)
 {
     line_list *temp;
     line_list *curr;
@@ -43,13 +43,13 @@ void free_line_list(line_list **head)
 }
 
 /**
- * add_line_node_end - Adds a new node with line at the end of line_list.
+ * line_list_node - Adds a new node with line at the end of line_list.
  * @head: Pointer to the head of the line_list.
  * @line: Pointer to the line string to be added to the new node.
  *
  * Return: Pointer to the modified line_list.
  */
-line_list *add_line_node_end(line_list **head, char *line)
+line_list *line_list_node(line_list **head, char *line)
 {
     line_list *new, *temp;
 
@@ -76,13 +76,13 @@ line_list *add_line_node_end(line_list **head, char *line)
 }
 
 /**
- * add_sep_node_end - Adds a new node with separator at the end of sep_list.
+ * add_separation_end - Adds a new node with separator at the end of sep_list.
  * @head: Pointer to the head of the sep_list.
  * @sep: Separator character to be added to the new node.
  *
  * Return: Pointer to the modified sep_list.
  */
-sep_list *add_sep_node_end(sep_list **head, char sep)
+sep_list *add_separation_end(sep_list **head, char sep)
 {
     sep_list *new, *temp;
 

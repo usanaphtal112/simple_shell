@@ -3,23 +3,23 @@
 /**
  * @brief Displays the environment variables.
  *
- * @param datash Pointer to the data structure containing shell information.
+ * @param simpdata Pointer to the data structure containing shell information.
  * @return 1 indicating success.
  */
-int _env(simple_shell_d *datash)
+int _env(simple_shell_d *simpdata)
 {
     int i, j;
 
-    for (i = 0; datash->_environ[i]; i++)
+    for (i = 0; simpdata->_environ[i]; i++)
     {
 
-        for (j = 0; datash->_environ[i][j]; j++)
+        for (j = 0; simpdata->_environ[i][j]; j++)
             ;
 
-        write(STDOUT_FILENO, datash->_environ[i], j);
+        write(STDOUT_FILENO, simpdata->_environ[i], j);
         write(STDOUT_FILENO, "\n", 1);
     }
-    datash->status = 0;
+    simpdata->status = 0;
 
     return (1);
 }

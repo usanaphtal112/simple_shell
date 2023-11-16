@@ -2,7 +2,7 @@
 
 /**
  * exit_shell - Terminate the shell program with a specified exit status.
- * @datash: Pointer to the simple_shell_d structure.
+ * @simpdata: Pointer to the simple_shell_d structure.
  *
  * This function handles the 'exit' shell command, allowing user to terminate
  * the shell program with an optional exit status. If an exit status provided
@@ -13,26 +13,27 @@
  *
  * @return: 0 on successful termination, 1 if an error occurred.
  */
-int exit_shell(simple_shell_d *datash)
+int exit_shell(simple_shell_d *simpdata)
 {
     unsigned int ustatus;
     int big_num;
     int is_dig;
     int str_len;
 
-    if (datash->args[1] != NULL)
+    if (simpdata->args[1] != NULL)
     {
-        ustatus = _atoi(datash->args[1]);
-        is_dig = _isdigit(datash->args[1]);
-        str_len = _strlen(datash->args[1]);
+        ustatus = _atoi(simpdata->args[1]);
+        is_dig = _isdigit(simpdata->args[1]);
+        str_len = _strlen(simpdata->args[1]);
         big_num = ustatus > (unsigned int)INT_MAX;
         if (!is_dig || str_len > 10 || big_num)
         {
-            get_error(datash, 2);
-            datash->status = 2;
+            get_error(simpdata, 2);
+            simpdata->status = 2;
             return (1);
         }
-        datash->status = (ustatus % 256);
+        simpdata->status = (ustatus % 256);
     }
     return (0);
 }
+

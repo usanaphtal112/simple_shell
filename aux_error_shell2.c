@@ -3,7 +3,7 @@
 /**
  * error_path_126 - Generate an error message for
  * permission denied errors (exit code 126).
- * @datash: Pointer to the simple_shell_d structure.
+ * @simpdata: Pointer to the simple_shell_d structure.
  *
  * This function generates an error message for
  * permission denied errors (exit code 126), including information
@@ -14,15 +14,15 @@
  * @return: A pointer to the dynamically allocated error message.
  *          Returns NULL if memory allocation fails.
  */
-char *error_path_126(simple_shell_d *datash)
+char *error_path_126(simple_shell_d *simpdata)
 {
     int length;
     char *ver_str;
     char *error;
 
-    ver_str = aux_itoa(datash->counter);
-    length = _strlen(datash->av[0]) + _strlen(ver_str);
-    length += _strlen(datash->args[0]) + 24;
+    ver_str = aux_itoa(simpdata->counter);
+    length = _strlen(simpdata->av[0]) + _strlen(ver_str);
+    length += _strlen(simpdata->args[0]) + 24;
     error = malloc(sizeof(char) * (length + 1));
     if (error == 0)
     {
@@ -30,11 +30,11 @@ char *error_path_126(simple_shell_d *datash)
         free(ver_str);
         return (NULL);
     }
-    _strcpy(error, datash->av[0]);
+    _strcpy(error, simpdata->av[0]);
     _strcat(error, ": ");
     _strcat(error, ver_str);
     _strcat(error, ": ");
-    _strcat(error, datash->args[0]);
+    _strcat(error, simpdata->args[0]);
     _strcat(error, ": Permission denied\n");
     _strcat(error, "\0");
     free(ver_str);
@@ -43,7 +43,7 @@ char *error_path_126(simple_shell_d *datash)
 
 /**
  * error_env - Generate an error message for environment-related errors.
- * @datash: Pointer to the simple_shell_d structure.
+ * @simpdata: Pointer to the simple_shell_d structure.
  *
  * This function generates an error message for environment-related errors,
  * including information about the program name, the shell's execution counter
@@ -54,17 +54,17 @@ char *error_path_126(simple_shell_d *datash)
  * @return: A pointer to the dynamically allocated error message.
  *          Returns NULL if memory allocation fails.
  */
-char *error_env(simple_shell_d *datash)
+char *error_env(simple_shell_d *simpdata)
 {
     int length;
     char *error;
     char *ver_str;
     char *msg;
 
-    ver_str = aux_itoa(datash->counter);
+    ver_str = aux_itoa(simpdata->counter);
     msg = ": Unable to add/remove from environment\n";
-    length = _strlen(datash->av[0]) + _strlen(ver_str);
-    length += _strlen(datash->args[0]) + _strlen(msg) + 4;
+    length = _strlen(simpdata->av[0]) + _strlen(ver_str);
+    length += _strlen(simpdata->args[0]) + _strlen(msg) + 4;
     error = malloc(sizeof(char) * (length + 1));
     if (error == 0)
     {
@@ -73,11 +73,11 @@ char *error_env(simple_shell_d *datash)
         return (NULL);
     }
 
-    _strcpy(error, datash->av[0]);
+    _strcpy(error, simpdata->av[0]);
     _strcat(error, ": ");
     _strcat(error, ver_str);
     _strcat(error, ": ");
-    _strcat(error, datash->args[0]);
+    _strcat(error, simpdata->args[0]);
     _strcat(error, msg);
     _strcat(error, "\0");
     free(ver_str);

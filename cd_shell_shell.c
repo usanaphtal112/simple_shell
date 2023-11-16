@@ -2,7 +2,7 @@
 
 /**
  * cd_shell - Change the current working directory based on provided arguments.
- * @datash: Pointer to the simple_shell_d structure.
+ * @simpdata: Pointer to the simple_shell_d structure.
  *
  * This function interprets the arguments passed to the 'cd' shell command and
  * changes the current working directory accordingly. It supports various
@@ -15,12 +15,12 @@
  * the directory to the specified path.
  * Returns: 1 on success.
  */
-int cd_shell(simple_shell_d *datash)
+int cd_shell(simple_shell_d *simpdata)
 {
     char *dir;
     int ishome, ishome2, isddash;
 
-    dir = datash->args[1];
+    dir = simpdata->args[1];
 
     if (dir != NULL)
     {
@@ -31,23 +31,23 @@ int cd_shell(simple_shell_d *datash)
 
     if (dir == NULL || !ishome || !ishome2 || !isddash)
     {
-        cd_to_home(datash);
+        cd_to_home(simpdata);
         return (1);
     }
 
     if (_strcmp("-", dir) == 0)
     {
-        cd_previous(datash);
+        cd_previous(simpdata);
         return (1);
     }
 
     if (_strcmp(".", dir) == 0 || _strcmp("..", dir) == 0)
     {
-        cd_dot(datash);
+        cd_dot(simpdata);
         return (1);
     }
 
-    cd_to(datash);
+    cd_to(simpdata);
 
     return (1);
 }

@@ -1,61 +1,61 @@
 #include "shell.h"
 
 /**
- * @brief Shell loop for continuous input and command execution.
+ * @brief Shell loop for continuous main_input and command execution.
  *
  * The main loop for the shell, continuously prompts
- * the user for input, reads the input,
+ * the user for main_input, reads the main_input,
  * removes comments, checks for syntax errors
  * replaces variables, and executes commands.
  *
- * @param datash Pointer to the simple_shell_d struct.
+ * @param simpdata Pointer to the simple_shell_d struct.
  * @return No return value.
  */
-void shell_loop(simple_shell_d *datash)
+void shell_loop(simple_shell_d *simpdata)
 {
     int loop, i_eof;
-    char *input;
+    char *main_input;
 
     loop = 1;
     while (loop == 1)
     {
         write(STDIN_FILENO, "^-^ ", 4);
-        input = read_line(&i_eof);
+        main_input = read_line(&i_eof);
         if (i_eof != -1)
         {
-            input = without_comment(input);
-            if (input == NULL)
+            main_input = without_comment(main_input);
+            if (main_input == NULL)
                 continue;
 
-            if (check_syntax_error(datash, input) == 1)
+            if (check_syntax_error(simpdata, main_input) == 1)
             {
-                datash->status = 2;
-                free(input);
+                simpdata->status = 2;
+                free(main_input);
                 continue;
             }
-            input = rep_var(input, datash);
-            loop = split_commands(datash, input);
-            datash->counter += 1;
-            free(input);
+            main_input = rep_var(main_input, simpdata);
+            loop = split_commands(simpdata, main_input);
+            simpdata->counter += 1;
+            free(main_input);
         }
         else
         {
             loop = 0;
-            free(input);
+            free(main_input);
         }
     }
 }
 
 /**
- * @brief Removes comments from the input string.
+ * @brief Removes comments from the main_input string.
  *
- * Removes comments from the input string 'in'. If a '#'
+ * Removes comments from the main_input string 'in'. If a '#'
  * character is encountered,
  * the function truncates the string up to the '#' character
  * If the '#' is the first character, the entire
  * string is freed, and NULL is returned.
  *
- * @param in Pointer to the input string.
+ * @param in Pointer to the main_input string.
  * @return Pointer to the modified string without comments
  * NULL if the entire string is a comment.
  */

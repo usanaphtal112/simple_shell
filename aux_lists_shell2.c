@@ -58,9 +58,9 @@ void free_rvar_list(r_var **head)
 }
 
 /**
- * add_rvar_node - Adds a node to the r_var linked list.
+ * variable_addition - Adds a node to the r_var linked list.
  *
- * The add_rvar_node function creates a new node with the specified values
+ * The variable_addition function creates a new node with the specified values
  * and appends it to the end of the r_var linked list. If the list is empty,
  * it initializes the list with the new node.
  *
@@ -71,7 +71,7 @@ void free_rvar_list(r_var **head)
  *
  * Return: A pointer to the head of the modified r_var linked list.
  */
-r_var *add_rvar_node(r_var **head, int lvar, char *val, int lval)
+r_var *variable_addition(r_var **head, int lvar, char *val, int lval)
 {
     r_var *new, *temp;
 

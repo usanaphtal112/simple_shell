@@ -3,7 +3,7 @@
 /**
  * get_error - Generate and display an error message
  * based on the evaluation code.
- * @datash: Pointer to the simple_shell_d structure.
+ * @simpdata: Pointer to the simple_shell_d structure.
  * @eval: Evaluation code indicating the type of error.
  *
  * This function generates an error message based
@@ -16,26 +16,26 @@
  *
  * @return: The provided evaluation code.
  */
-int get_error(simple_shell_d *datash, int eval)
+int get_error(simple_shell_d *simpdata, int eval)
 {
     char *error;
 
     switch (eval)
     {
     case -1:
-        error = error_env(datash);
+        error = error_env(simpdata);
         break;
     case 126:
-        error = error_path_126(datash);
+        error = error_path_126(simpdata);
         break;
     case 127:
-        error = error_not_found(datash);
+        error = error_not_found(simpdata);
         break;
     case 2:
-        if (_strcmp("exit", datash->args[0]) == 0)
-            error = error_exit_shell(datash);
-        else if (_strcmp("cd", datash->args[0]) == 0)
-            error = error_get_cd(datash);
+        if (_strcmp("exit", simpdata->args[0]) == 0)
+            error = error_exit_shell(simpdata);
+        else if (_strcmp("cd", simpdata->args[0]) == 0)
+            error = error_get_cd(simpdata);
         break;
     }
 
@@ -45,6 +45,6 @@ int get_error(simple_shell_d *datash, int eval)
         free(error);
     }
 
-    datash->status = eval;
+    simpdata->status = eval;
     return (eval);
 }

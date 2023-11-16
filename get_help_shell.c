@@ -2,7 +2,7 @@
 
 /**
  * get_help - Display help information for shell commands.
- * @datash: Pointer to the simple_shell_d structure.
+ * @simpdata: Pointer to the simple_shell_d structure.
  *
  * This function displays help information for various shell commands based on
  * the provided command-line argument. If no argument is provided, general help
@@ -12,29 +12,29 @@
  *
  * @return: 1 to indicate successful execution.
  */
-int get_help(simple_shell_d *datash)
+int get_help(simple_shell_d *simpdata)
 {
 
-    if (datash->args[1] == 0)
+    if (simpdata->args[1] == 0)
         aux_help_general();
-    else if (_strcmp(datash->args[1], "setenv") == 0)
+    else if (_strcmp(simpdata->args[1], "setenv") == 0)
         aux_help_setenv();
-    else if (_strcmp(datash->args[1], "env") == 0)
+    else if (_strcmp(simpdata->args[1], "env") == 0)
         aux_help_env();
-    else if (_strcmp(datash->args[1], "unsetenv") == 0)
+    else if (_strcmp(simpdata->args[1], "unsetenv") == 0)
         aux_help_unsetenv();
-    else if (_strcmp(datash->args[1], "help") == 0)
+    else if (_strcmp(simpdata->args[1], "help") == 0)
         aux_help();
-    else if (_strcmp(datash->args[1], "exit") == 0)
+    else if (_strcmp(simpdata->args[1], "exit") == 0)
         aux_help_exit();
-    else if (_strcmp(datash->args[1], "cd") == 0)
+    else if (_strcmp(simpdata->args[1], "cd") == 0)
         aux_help_cd();
-    else if (_strcmp(datash->args[1], "alias") == 0)
+    else if (_strcmp(simpdata->args[1], "alias") == 0)
         aux_help_alias();
     else
-        write(STDERR_FILENO, datash->args[0],
-              _strlen(datash->args[0]));
+        write(STDERR_FILENO, simpdata->args[0],
+              _strlen(simpdata->args[0]));
 
-    datash->status = 0;
+    simpdata->status = 0;
     return (1);
 }
