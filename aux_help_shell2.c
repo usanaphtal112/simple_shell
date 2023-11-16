@@ -1,86 +1,48 @@
 #include "shell.h"
 
 /**
- * error_path_126 - Generate an error message for permission
- * denied errors (exit code 126).
- * @datash: Pointer to the data_shell structure.
+ * aux_help_cd - Displays information about the 'cd' builtin command.
  *
- * This function generates an error message for
- * permission denied errors (exit code 126),
- * including information about the program name, the shell's execution counter
- * and the command. The resulting error message is dynamically allocated
- * and should be freed by the caller.
- *
- * @return: A pointer to the dynamically allocated error message.
- * Returns NULL if memory allocation fails.
+ * The aux_help_cd function prints information about the 'cd' command.
+ * It provides details on changing the shell working directory.
  */
-char *error_path_126(data_shell *datash)
+void aux_help_cd(void)
 {
-    int length;
-    char *ver_str;
-    char *error;
+    char *help = "cd: cd [-L|[-P [-e]] [-@]] [dir]\n";
 
-    ver_str = aux_itoa(datash->counter);
-    length = _strlen(datash->av[0]) + _strlen(ver_str);
-    length += _strlen(datash->args[0]) + 24;
-    error = malloc(sizeof(char) * (length + 1));
-    if (error == 0)
-    {
-        free(error);
-        free(ver_str);
-        return (NULL);
-    }
-    _strcpy(error, datash->av[0]);
-    _strcat(error, ": ");
-    _strcat(error, ver_str);
-    _strcat(error, ": ");
-    _strcat(error, datash->args[0]);
-    _strcat(error, ": Permission denied\n");
-    _strcat(error, "\0");
-    free(ver_str);
-    return (error);
+    write(STDOUT_FILENO, help, _strlen(help));
+    help = "\tChange the shell working directory.\n ";
+    write(STDOUT_FILENO, help, _strlen(help));
 }
 
 /**
- * error_env - Generate an error message for environment-related errors.
- * @datash: Pointer to the data_shell structure.
+ * aux_help - Displays information about builtin commands.
  *
- * This function generates an error message for environment-related errors,
- * including information about the program name, the shell's execution counter,
- * the command, and a generic message indicating the inability to add/remove
- * from the environment. The resulting error message is dynamically allocated
- * and should be freed by the caller.
- *
- * @return: A pointer to the dynamically allocated error message.
- * Returns NULL if memory allocation fails.
+ * The aux_help function prints brief summaries of builtin commands.
+ * It provides information about the 'help' command.
  */
-char *error_env(data_shell *datash)
+void aux_help(void)
 {
-    int length;
-    char *error;
-    char *ver_str;
-    char *msg;
+    char *help = "help: help [-dms] [pattern ...]\n";
 
-    ver_str = aux_itoa(datash->counter);
-    msg = ": Unable to add/remove from environment\n";
-    length = _strlen(datash->av[0]) + _strlen(ver_str);
-    length += _strlen(datash->args[0]) + _strlen(msg) + 4;
-    error = malloc(sizeof(char) * (length + 1));
-    if (error == 0)
-    {
-        free(error);
-        free(ver_str);
-        return (NULL);
-    }
+    write(STDOUT_FILENO, help, _strlen(help));
+    help = "\tDisplay information about builtin commands.\n ";
+    write(STDOUT_FILENO, help, _strlen(help));
+    help = "Displays brief summaries of builtin commands.\n";
+    write(STDOUT_FILENO, help, _strlen(help));
+}
 
-    _strcpy(error, datash->av[0]);
-    _strcat(error, ": ");
-    _strcat(error, ver_str);
-    _strcat(error, ": ");
-    _strcat(error, datash->args[0]);
-    _strcat(error, msg);
-    _strcat(error, "\0");
-    free(ver_str);
+/**
+ * aux_help_alias - Displays information about the 'alias' builtin command.
+ *
+ * The aux_help_alias function prints information about the 'alias' command.
+ * It provides details on how to define or display aliases.
+ */
+void aux_help_alias(void)
+{
+    char *help = "alias: alias [-p] [name[=value]...]\n";
 
-    return (error);
+    write(STDOUT_FILENO, help, _strlen(help));
+    help = "\tDefine or display aliases.\n ";
+    write(STDOUT_FILENO, help, _strlen(help));
 }

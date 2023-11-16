@@ -94,7 +94,7 @@ typedef struct r_var_list
     char *val;
     int len_val;
     struct r_var_list *next;
-} var_n;
+} r_var;
 
 /**
  * @struct builtin_t
@@ -114,11 +114,14 @@ typedef struct builtin_s
     int (*f)(data_shell *datash);
 } builtin_t;
 
+/*
 sep_list *add_separation_end(sep_list **head, char sep);
 void separation_list(sep_list **head);
 line_list *line_list_node(line_list **head, char *line);
 void line_list(line_list **head);
+*/
 
+r_var *add_rvar_node(r_var **head, int lvar, char *var, int lval);
 char *_strchr(char *s, char c);
 char *_strcat(char *destin, const char *src);
 int _strspn(char *s, char *accept);
@@ -153,10 +156,17 @@ void shell_loop(data_shell *datash);
 
 char *read_line(int *i_eof);
 
+/*
 void check_env(var_n **h, char *in, data_shell *data);
 int check_vars(var_n **h, char *in, char *st, data_shell *data);
 char *replaced_input(var_n **head, char *input, char *new_input, int nlen);
 char *rep_var(char *input, data_shell *datash);
+*/
+
+char *rep_var(char *input, data_shell *datash);
+void check_env(r_var **h, char *in, data_shell *data);
+char *replaced_input(r_var **head, char *input, char *new_input, int nlen);
+int check_vars(r_var **h, char *in, char *st, data_shell *data);
 
 void bring_line(char **lineptr, size_t *n, char *buffer, size_t j);
 ssize_t get_line(char **lineptr, size_t *n, FILE *stream);
@@ -176,6 +186,10 @@ char *copy_info(char *name, char *value);
 int _setenv(data_shell *datash);
 void set_env(char *name, char *value, data_shell *datash);
 int _unsetenv(data_shell *datash);
+
+void aux_help_cd(void);
+void aux_help_alias(void);
+void aux_help(void);
 
 void cd_previous(data_shell *datash);
 void cd_dot(data_shell *datash);
@@ -208,6 +222,7 @@ void aux_help_unsetenv(void);
 void aux_help_env(void);
 void aux_help_exit(void);
 void aux_help_setenv(void);
+void free_rvar_list(r_var **head);
 void aux_help_general(void);
 
 char *error_path_126(data_shell *datash);
@@ -215,5 +230,10 @@ char *error_env(data_shell *datash);
 char *error_get_alias(char **args);
 char *error_syntax(char **args);
 char *error_permission(char **args);
+
+sep_list *add_sep_node_end(sep_list **head, char sep);
+void free_sep_list(sep_list **head);
+line_list *add_line_node_end(line_list **head, char *line);
+void free_line_list(line_list **head);
 
 #endif
