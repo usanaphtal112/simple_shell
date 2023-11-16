@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
@@ -123,6 +124,7 @@ line_list *line_list_node(line_list **head, char *line);
 void line_list(line_list **head);
 */
 
+int _strncmp(const char *str1, const char *str2, size_t n);
 r_var *variable_addition(r_var **head, int lvar, char *var, int lval);
 char *_strchr(char *s, char c);
 char *_strcat(char *destin, const char *src);

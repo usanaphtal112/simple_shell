@@ -47,6 +47,36 @@ int cmp_env_name(const char *nenv, const char *name)
 }
 
 /**
+ * @brief Compares the first 'n' characters of two strings in a case-sensitive manner.
+ *
+ * This function compares the first 'n' characters of the strings 'str1' and 'str2'
+ * in a case-sensitive manner. The comparison stops when 'n' characters are
+ * compared, or when the end of either string is reached. It returns 0 if the
+ * compared portions are equal, a positive value if 'str1' is greater, and a
+ * negative value if 'str2' is greater.
+ *
+ * @param str1 The first string to compare.
+ * @param str2 The second string to compare.
+ * @param n The maximum number of characters to compare.
+ * @return 0 if the compared portions are equal, a positive value if 'str1' is greater,
+ *         and a negative value if 'str2' is greater.
+ */
+int _strncmp(const char *str1, const char *str2, size_t n)
+{
+    while (n > 0 && *str1 && (*str1 == *str2))
+    {
+        str1++;
+        str2++;
+        n--;
+    }
+    if (n == 0)
+    {
+        return 0;
+    }
+    return *(unsigned char *)str1 - *(unsigned char *)str2;
+}
+
+/**
  * @brief Gets the value of an environment variable by name.
  *
  * @param name The name of the environment variable to retrieve.
@@ -55,21 +85,16 @@ int cmp_env_name(const char *nenv, const char *name)
  */
 char *_getenv(const char *name, char **_environ)
 {
-    char *ptr_env;
-    int i, mov;
-
-    ptr_env = NULL;
-    mov = 0;
+    int i;
+    int name_len = _strlen(name);
 
     for (i = 0; _environ[i]; i++)
     {
-        mov = cmp_env_name(_environ[i], name);
-        if (mov)
+        if (_strncmp(_environ[i], name, name_len) == 0 && _environ[i][name_len] == '=')
         {
-            ptr_env = _environ[i];
-            break;
+            return _environ[i] + name_len + 1;
         }
     }
 
-    return (ptr_env + mov);
+    return NULL;
 }
