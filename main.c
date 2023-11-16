@@ -13,6 +13,7 @@
 void set_data(simple_shell_d *simpdata, char **av)
 {
     unsigned int i;
+    unsigned int env_count = 0;
 
     simpdata->av = av;
     simpdata->main_input = NULL;
@@ -20,17 +21,20 @@ void set_data(simple_shell_d *simpdata, char **av)
     simpdata->status = 0;
     simpdata->counter = 1;
 
-    for (i = 0; environ[i]; i++)
-        ;
+    /* Count the number of environment variables*/
+    while (environ[env_count])
+    {
+        env_count++;
+    }
 
-    simpdata->_environ = malloc(sizeof(char *) * (i + 1));
-
-    for (i = 0; environ[i]; i++)
+    /* Allocate memory for _environ array */
+    simpdata->_environ = (char **)malloc(sizeof(char *) * (env_count + 1));
+    for (i = 0; i < env_count; i++)
     {
         simpdata->_environ[i] = _strdup(environ[i]);
     }
 
-    simpdata->_environ[i] = NULL;
+    simpdata->_environ[env_count] = NULL;
     simpdata->pid = aux_itoa(getpid());
 }
 
@@ -82,3 +86,4 @@ int main(int ac, char **av)
         return (255);
     return (simpdata.status);
 }
+
