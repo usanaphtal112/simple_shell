@@ -3,10 +3,10 @@
 /**
  * @brief Duplicates a string.
  *
- * Allocates memory for a new string, copies the content of the input string 's'
+ * Allocates memory for a new string, copies the content of the main_input string 's'
  * (including the null terminator), and returns a pointer to the new string.
  *
- * @param s Pointer to the input string to be duplicated.
+ * @param s Pointer to the main_input string to be duplicated.
  * @return Pointer to the duplicated string, or NULL if memory allocation fails.
  */
 char *_strdup(const char *s)
@@ -25,11 +25,11 @@ char *_strdup(const char *s)
 /**
  * @brief Computes the length of a string.
  *
- * Calculates and returns the length of the input string 's',
+ * Calculates and returns the length of the main_input string 's',
  * excluding the null terminator.
  *
- * @param s Pointer to the input string.
- * @return Length of the input string.
+ * @param s Pointer to the main_input string.
+ * @return Length of the main_input string.
  */
 int _strlen(const char *s)
 {
@@ -44,45 +44,39 @@ int _strlen(const char *s)
 /**
  * @brief Compares characters in a string to a set of characters.
  *
- * Compares each character in the input string 'str' to
+ * Compares each character in the main_input string 'str' to
  * the characters in the delimiter string
  * 'delim'. Returns 1 if all characters in 'str'
  * are delimiters; otherwise, returns 0.
  *
- * @param str The input string to be checked.
+ * @param str The main_input string to be checked.
  * @param delim The set of delimiter characters.
  * @return 1 if all characters in 'str' are delimiters, 0 otherwise.
  */
 int cmp_chars(char str[], const char *delim)
 {
-    unsigned int i, j, k;
-
-    for (i = 0, k = 0; str[i]; i++)
+    while (*str)
     {
-        for (j = 0; delim[j]; j++)
+        if (strchr(delim, *str) == NULL)
         {
-            if (str[i] == delim[j])
-            {
-                k++;
-                break;
-            }
+            return 0;
         }
+        str++;
     }
-    if (i == k)
-        return (1);
-    return (0);
+
+    return 1;
 }
 
 /**
  * @brief Tokenizes a string.
  *
- * Breaks the input string 'str' into tokens
+ * Breaks the main_input string 'str' into tokens
  * using the specified delimiter string 'delim'.
  * Maintains state between calls using static variables.
  * Returns a pointer to the next token,
  * or NULL when no more tokens are found.
  *
- * @param str The input string to be tokenized.
+ * @param str The main_input string to be tokenized.
  * @param delim The delimiter string used for tokenization.
  * @return Pointer to the next token, or NULL if no more tokens are found.
  */
@@ -131,7 +125,7 @@ char *_strtok(char str[], const char *delim)
 /**
  * @brief Checks if a string contains only digits.
  *
- * Checks if all characters in the input string 's'
+ * Checks if all characters in the main_input string 's'
  * are digits (0-9). Returns 1 if all characters
  * are digits; otherwise, returns 0.
  *
