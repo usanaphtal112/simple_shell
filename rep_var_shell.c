@@ -11,10 +11,10 @@
  * @param h Pointer to the head of the replacement variable linked list.
  * @param in Pointer to the input string.
  * @param st Pointer to the status string.
- * @param data Pointer to the data_shell struct.
+ * @param data Pointer to the simple_shell_d struct.
  * @return The length of the checked string.
  */
-int check_vars(r_var **h, char *in, char *st, data_shell *data)
+int check_vars(r_var **h, char *in, char *st, simple_shell_d *data)
 {
     int i, lst, lpd;
 
@@ -52,14 +52,14 @@ int check_vars(r_var **h, char *in, char *st, data_shell *data)
  * Checks the input string 'in' for environment variables
  * adds them to the replacement variable linked list ('h').
  * Environment variables are compared against the current environment
- * in the data_shell struct ('data') to find their values.
+ * in the simple_shell_d struct ('data') to find their values.
  *
  * @param h Pointer to the head of the replacement variable linked list.
  * @param in Pointer to the input string.
- * @param data Pointer to the data_shell struct.
+ * @param data Pointer to the simple_shell_d struct.
  * @return No return value.
  */
-void check_env(r_var **h, char *in, data_shell *data)
+void check_env(r_var **h, char *in, simple_shell_d *data)
 {
     int row, chr, j, lval;
     char **_envr;
@@ -100,10 +100,10 @@ void check_env(r_var **h, char *in, data_shell *data)
  * and the replacement variable linked list.
  *
  * @param input Pointer to the input string.
- * @param datash Pointer to the data_shell struct.
+ * @param datash Pointer to the simple_shell_d struct.
  * @return Pointer to the new string with variables replaced.
  */
-char *rep_var(char *input, data_shell *datash)
+char *rep_var(char *input, simple_shell_d *datash)
 {
     r_var *head, *indx;
     char *status, *new_input;

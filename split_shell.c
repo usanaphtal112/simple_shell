@@ -106,10 +106,10 @@ char **split_line(char *input)
  *
  * @param list_s Pointer to the separator linked list.
  * @param list_l Pointer to the line linked list.
- * @param datash Pointer to the data_shell struct.
+ * @param datash Pointer to the simple_shell_d struct.
  * @return No return value.
  */
-void go_next(sep_list **list_s, line_list **list_l, data_shell *datash)
+void go_next(sep_list **list_s, line_list **list_l, simple_shell_d *datash)
 {
     int loop_sep;
     sep_list *ls_s;
@@ -150,11 +150,11 @@ void go_next(sep_list **list_s, line_list **list_l, data_shell *datash)
  * commands based on separators and operators.
  * Uses linked lists for separators and lines to manage the command structure.
  *
- * @param datash Pointer to the data_shell struct.
+ * @param datash Pointer to the simple_shell_d struct.
  * @param input Pointer to the input string.
  * @return 0 if the loop should terminate, 1 otherwise.
  */
-int split_commands(data_shell *datash, char *input)
+int split_commands(simple_shell_d *datash, char *input)
 {
 
     sep_list *head_s, *list_s;

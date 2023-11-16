@@ -3,13 +3,14 @@
 /**
  * @brief Checks for syntax errors in the input string.
  *
- * Checks for syntax errors in the input string 'input' and prints an error message if any errors are found.
+ * Checks for syntax errors in the input string 'input'
+ * and prints an error message if any errors are found.
  *
- * @param datash Pointer to the data_shell struct.
+ * @param datash Pointer to the simple_shell_d struct.
  * @param input Pointer to the input string.
  * @return 0 if no syntax errors are found, 1 otherwise.
  */
-int check_syntax_error(data_shell *datash, char *input)
+int check_syntax_error(simple_shell_d *datash, char *input)
 {
     int begin = 0;
     int f_char = 0;
@@ -122,13 +123,13 @@ int first_char(char *input, int *i)
  * is at the current position
  * or one position before.
  *
- * @param datash Pointer to the data_shell struct.
+ * @param datash Pointer to the simple_shell_d struct.
  * @param input Pointer to the input string.
  * @param i Position in the string where the error occurred.
  * @param bool Flag indicating if the error is at the current
  * position (0) or one position before (1).
  */
-void print_syntax_error(data_shell *datash, char *input, int i, int bool)
+void print_syntax_error(simple_shell_d *datash, char *input, int i, int bool)
 {
     char *msg, *msg2, *msg3, *error, *counter;
     int length;

@@ -2,14 +2,14 @@
 
 /**
  * cd_to_home - Change the current working directory.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function changes the current working directory
  * It updates the environment variables PWD and OLDPWD accordingly.
  * If the home directory is not found, it sets the appropriate error code.
  */
 
-void cd_to_home(data_shell *datash)
+void cd_to_home(simple_shell_d *datash)
 {
     char *p_pwd, *home;
     char pwd[PATH_MAX];
@@ -41,13 +41,13 @@ void cd_to_home(data_shell *datash)
 
 /**
  * cd_to - Change the current working directory to the specified directory.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function changes the current working directory
  * It updates the environment variables PWD and OLDPWD accordingly.
  * If the specified directory is invalid, it sets the appropriate error code.
  */
-void cd_to(data_shell *datash)
+void cd_to(simple_shell_d *datash)
 {
     char pwd[PATH_MAX];
     char *dir, *cp_pwd, *cp_dir;
@@ -77,13 +77,13 @@ void cd_to(data_shell *datash)
 
 /**
  * cd_previous - Change the current working directory
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function changes the current working directory.
  * and updates the environment variables PWD and OLDPWD accordingly.
  * It also prints the new current directory to the standard output.
  */
-void cd_previous(data_shell *datash)
+void cd_previous(simple_shell_d *datash)
 {
     char pwd[PATH_MAX];
     char *p_pwd, *p_oldpwd, *cp_pwd, *cp_oldpwd;
@@ -122,13 +122,13 @@ void cd_previous(data_shell *datash)
 /**
  * cd_dot - Change the current working directory to
  * the specified directory or stay in the current directory.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function changes the current working directory
  * or remains in the current directory if the specified directory is "." or "/"
  * It updates the environment variables PWD and OLDPWD accordingly.
  */
-void cd_dot(data_shell *datash)
+void cd_dot(simple_shell_d *datash)
 {
     char pwd[PATH_MAX];
     char *dir, *cp_pwd, *cp_strtok_pwd;

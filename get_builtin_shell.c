@@ -11,7 +11,7 @@
  * @return: Function pointer to the corresponding built-in
  * command if found, otherwise, NULL.
  */
-int (*get_builtin(char *cmd))(data_shell *)
+int (*get_builtin(char *cmd))(simple_shell_d *)
 {
     builtin_t builtin[] = {
         {"env", _env},

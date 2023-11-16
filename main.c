@@ -1,16 +1,16 @@
 #include "shell.h"
 
 /**
- * set_data - Initialize the data_shell structure with necessary information.
- * @datash: Pointer to the data_shell structure.
+ * set_data - Initialize the simple_shell_d structure with necessary information.
+ * @datash: Pointer to the simple_shell_d structure.
  * @av: Array of strings containing the program arguments.
  *
- * This function initializes the data_shell structure with information needed
+ * This function initializes the simple_shell_d structure with information needed
  * for the shell's operation. It sets various fields such as av, input, args,
  * status, counter, _environ, and pid. The _environ array is populated with
  * environment variables, and the pid field is set to the current process ID.
  */
-void set_data(data_shell *datash, char **av)
+void set_data(simple_shell_d *datash, char **av)
 {
     unsigned int i;
 
@@ -35,15 +35,15 @@ void set_data(data_shell *datash, char **av)
 }
 
 /**
- * free_data - Free allocated memory in the data_shell structure.
- * @datash: Pointer to the data_shell structure.
+ * free_data - Free allocated memory in the simple_shell_d structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
- * This function frees the dynamically allocated memory within the data_shell
+ * This function frees the dynamically allocated memory within the simple_shell_d
  * structure, including the _environ array and the pid string. It iterates
  * through the _environ array and frees each string element. After freeing the
  * memory, the pointers are set to NULL to avoid potential use-after-free.
  */
-void free_data(data_shell *datash)
+void free_data(simple_shell_d *datash)
 {
     unsigned int i;
 
@@ -62,7 +62,7 @@ void free_data(data_shell *datash)
  * @av: Array of strings containing command-line arguments.
  *
  * This function serves as the entry point for the custom shell program.
- * It initializes the data_shell structure, sets up a signal handler for
+ * It initializes the simple_shell_d structure, sets up a signal handler for
  * SIGINT (Ctrl+C), enters the shell loop, and frees allocated memory
  * before returning the exit status.
  *
@@ -71,7 +71,7 @@ void free_data(data_shell *datash)
 
 int main(int ac, char **av)
 {
-    data_shell datash;
+    simple_shell_d datash;
     (void)ac;
 
     signal(SIGINT, get_sigint);

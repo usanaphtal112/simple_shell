@@ -2,7 +2,7 @@
 
 /**
  * error_get_cd - Generate an error message for 'cd' command errors.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function generates an error message for 'cd' command errors, including
  * information about the program name, error type, command
@@ -13,7 +13,7 @@
  *          Returns NULL if memory allocation fails.
  */
 
-char *error_get_cd(data_shell *datash)
+char *error_get_cd(simple_shell_d *datash)
 {
     int length, len_id;
     char *error, *ver_str, *msg;
@@ -49,7 +49,7 @@ char *error_get_cd(data_shell *datash)
 
 /**
  * strcat_cd - Concatenate error message components for 'cd'
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  * @msg: String message indicating the type of error.
  * @error: Buffer to store the resulting error message.
  * @ver_str: String representation of the shell's execution counter.
@@ -61,7 +61,7 @@ char *error_get_cd(data_shell *datash)
  *
  * @return: A pointer to the constructed error message.
  */
-char *strcat_cd(data_shell *datash, char *msg, char *error, char *ver_str)
+char *strcat_cd(simple_shell_d *datash, char *msg, char *error, char *ver_str)
 {
     char *illegal_flag;
 
@@ -93,7 +93,7 @@ char *strcat_cd(data_shell *datash, char *msg, char *error, char *ver_str)
 /**
  * error_exit_shell - Generate an error message
  *  for 'exit' command errors.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function generates an error message
  * for 'exit' command errors, including
@@ -102,7 +102,7 @@ char *strcat_cd(data_shell *datash, char *msg, char *error, char *ver_str)
  * @return: A pointer to the dynamically allocated error message.
  * Returns NULL if memory allocation fails.
  */
-char *error_exit_shell(data_shell *datash)
+char *error_exit_shell(simple_shell_d *datash)
 {
     int length;
     char *error;
@@ -132,14 +132,14 @@ char *error_exit_shell(data_shell *datash)
 
 /**
  * error_not_found - Generate an error message for command not found errors.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * The resulting error message is dynamically allocated
  *
  * @return: A pointer to the dynamically allocated error message.
  *          Returns NULL if memory allocation fails.
  */
-char *error_not_found(data_shell *datash)
+char *error_not_found(simple_shell_d *datash)
 {
     int length;
     char *error;
@@ -165,4 +165,3 @@ char *error_not_found(data_shell *datash)
     free(ver_str);
     return (error);
 }
-

@@ -3,7 +3,7 @@
 /**
  * error_path_126 - Generate an error message for
  * permission denied errors (exit code 126).
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function generates an error message for
  * permission denied errors (exit code 126), including information
@@ -14,7 +14,7 @@
  * @return: A pointer to the dynamically allocated error message.
  *          Returns NULL if memory allocation fails.
  */
-char *error_path_126(data_shell *datash)
+char *error_path_126(simple_shell_d *datash)
 {
     int length;
     char *ver_str;
@@ -43,7 +43,7 @@ char *error_path_126(data_shell *datash)
 
 /**
  * error_env - Generate an error message for environment-related errors.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function generates an error message for environment-related errors,
  * including information about the program name, the shell's execution counter
@@ -54,7 +54,7 @@ char *error_path_126(data_shell *datash)
  * @return: A pointer to the dynamically allocated error message.
  *          Returns NULL if memory allocation fails.
  */
-char *error_env(data_shell *datash)
+char *error_env(simple_shell_d *datash)
 {
     int length;
     char *error;

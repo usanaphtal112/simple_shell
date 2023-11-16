@@ -9,10 +9,9 @@
  * @param datash Pointer to the data structure containing shell information.
  * @return 0 if the command was executed successfully, 1 otherwise.
  */
-int exec_line(data_shell *datash)
+int exec_line(simple_shell_d *datash)
 {
-    int (*builtin)(data_shell *datash);
-    /*Check if the command is empty*/
+    int (*builtin)(simple_shell_d *datash);
     if (datash->args[0] == NULL)
         return (1);
 

@@ -57,7 +57,7 @@ char *_which(char *cmd, char **_environ)
  * @param datash Pointer to the data structure containing shell information.
  * @return 1 if the command was executed successfully, 0 otherwise.
  */
-int cmd_exec(data_shell *datash)
+int cmd_exec(simple_shell_d *datash)
 {
     pid_t pd;
     pid_t wpd;
@@ -109,7 +109,7 @@ int cmd_exec(data_shell *datash)
  * @param datash Pointer to the data structure containing shell information.
  * @return The length of the executable part of the command if executable, -1.
  */
-int is_executable(data_shell *datash)
+int is_executable(simple_shell_d *datash)
 {
     struct stat st;
     int i;
@@ -156,7 +156,7 @@ int is_executable(data_shell *datash)
  * @param datash Pointer to the data structure
  * @return 1 if there is an error, 0 otherwise.
  */
-int check_error_cmd(char *dir, data_shell *datash)
+int check_error_cmd(char *dir, simple_shell_d *datash)
 {
     if (dir == NULL)
     {

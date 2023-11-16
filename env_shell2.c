@@ -10,7 +10,7 @@
  * @param value The value to set for the environment variable.
  * @param datash Pointer to the data structure containing shell information.
  */
-void set_env(char *name, char *value, data_shell *datash)
+void set_env(char *name, char *value, simple_shell_d *datash)
 {
     int i;
     char *var_env, *name_env;
@@ -66,7 +66,7 @@ char *copy_info(char *name, char *value)
  * @param datash Pointer to the data structure containing shell information.
  * @return 1 indicating success.
  */
-int _unsetenv(data_shell *datash)
+int _unsetenv(simple_shell_d *datash)
 {
     char **realloc_environ;
     char *var_env, *name_env;
@@ -117,7 +117,7 @@ int _unsetenv(data_shell *datash)
  * @param datash Pointer to the data structure containing shell information.
  * @return 1 indicating success.
  */
-int _setenv(data_shell *datash)
+int _setenv(simple_shell_d *datash)
 {
 
     if (datash->args[1] == NULL || datash->args[2] == NULL)

@@ -2,7 +2,7 @@
 
 /**
  * exit_shell - Terminate the shell program with a specified exit status.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function handles the 'exit' shell command, allowing user to terminate
  * the shell program with an optional exit status. If an exit status provided
@@ -13,7 +13,7 @@
  *
  * @return: 0 on successful termination, 1 if an error occurred.
  */
-int exit_shell(data_shell *datash)
+int exit_shell(simple_shell_d *datash)
 {
     unsigned int ustatus;
     int big_num;

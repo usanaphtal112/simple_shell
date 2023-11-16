@@ -6,7 +6,7 @@
  * @param datash Pointer to the data structure containing shell information.
  * @return 1 indicating success.
  */
-int _env(data_shell *datash)
+int _env(simple_shell_d *datash)
 {
     int i, j;
 

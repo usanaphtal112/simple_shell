@@ -3,7 +3,7 @@
 /**
  * get_error - Generate and display an error message
  * based on the evaluation code.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  * @eval: Evaluation code indicating the type of error.
  *
  * This function generates an error message based
@@ -16,7 +16,7 @@
  *
  * @return: The provided evaluation code.
  */
-int get_error(data_shell *datash, int eval)
+int get_error(simple_shell_d *datash, int eval)
 {
     char *error;
 

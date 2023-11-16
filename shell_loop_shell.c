@@ -8,10 +8,10 @@
  * removes comments, checks for syntax errors
  * replaces variables, and executes commands.
  *
- * @param datash Pointer to the data_shell struct.
+ * @param datash Pointer to the simple_shell_d struct.
  * @return No return value.
  */
-void shell_loop(data_shell *datash)
+void shell_loop(simple_shell_d *datash)
 {
     int loop, i_eof;
     char *input;

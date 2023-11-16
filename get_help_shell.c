@@ -2,7 +2,7 @@
 
 /**
  * get_help - Display help information for shell commands.
- * @datash: Pointer to the data_shell structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function displays help information for various shell commands based on
  * the provided command-line argument. If no argument is provided, general help
@@ -12,7 +12,7 @@
  *
  * @return: 1 to indicate successful execution.
  */
-int get_help(data_shell *datash)
+int get_help(simple_shell_d *datash)
 {
 
     if (datash->args[1] == 0)
