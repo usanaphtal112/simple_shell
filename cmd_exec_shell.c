@@ -59,47 +59,46 @@ char *_which(char *cmd, char **_environ)
  */
 int cmd_exec(simple_shell_d *simpdata)
 {
-    pid_t pd;
-    pid_t wpd;
-    int state;
-    int exec;
+    int exec = is_executable(simpdata);
     char *dir;
-    (void)wpd;
+    pid_t pd = fork();
 
-    exec = is_executable(simpdata);
     if (exec == -1)
-        return (1);
+    {
+        return 1;
+    }
+
     if (exec == 0)
     {
         dir = _which(simpdata->args[0], simpdata->_environ);
         if (check_error_cmd(dir, simpdata) == 1)
-            return (1);
-    }
-
-    pd = fork();
-    if (pd == 0)
-    {
-        if (exec == 0)
-            dir = _which(simpdata->args[0], simpdata->_environ);
-        else
-            dir = simpdata->args[0];
-        execve(dir + exec, simpdata->args, simpdata->_environ);
-    }
-    else if (pd < 0)
-    {
-        perror(simpdata->av[0]);
-        return (1);
+        {
+            return 1;
+        }
     }
     else
     {
-        do
-        {
-            wpd = waitpid(pd, &state, WUNTRACED);
-        } while (!WIFEXITED(state) && !WIFSIGNALED(state));
+        dir = simpdata->args[0];
     }
 
-    simpdata->status = state / 256;
-    return (1);
+    if (pd == -1)
+    {
+        perror(simpdata->av[0]);
+        return 1;
+    }
+    else if (pd == 0)
+    {
+        execve(dir + exec, simpdata->args, simpdata->_environ);
+        perror(simpdata->av[0]);
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        int state;
+        waitpid(pd, &state, 0);
+        simpdata->status = WIFEXITED(state) ? WEXITSTATUS(state) : 1;
+        return 1;
+    }
 }
 
 /**
