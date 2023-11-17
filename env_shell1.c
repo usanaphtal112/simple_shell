@@ -33,17 +33,25 @@ int _env(simple_shell_d *simpdata)
  */
 int cmp_env_name(const char *nenv, const char *name)
 {
-    int i;
+    size_t itr = 0;
 
-    for (i = 0; nenv[i] != '='; i++)
+    /* Compare characters until the end of either string or until '=' is encountered*/
+    while (nenv[itr] && nenv[itr] != '=' && nenv[itr] == name[itr])
     {
-        if (nenv[i] != name[i])
-        {
-            return (0);
-        }
+        itr++;
     }
 
-    return (i + 1);
+    /* Check if the comparison stopped because of '=' or if both strings match*/
+    if (nenv[itr] == '=' && name[itr] == '\0')
+    {
+        /* Entire name matches, return the length of the common prefix*/
+        return itr + 1;
+    }
+    else
+    {
+        /* Names do not match*/
+        return 0;
+    }
 }
 
 /**
