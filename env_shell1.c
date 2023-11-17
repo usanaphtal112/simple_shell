@@ -6,22 +6,25 @@
  * @param simpdata Pointer to the data structure containing shell information.
  * @return 1 indicating success.
  */
+/**
+ * @brief Displays the environment variables.
+ *
+ * @param simpdata Pointer to the data structure containing shell information.
+ * @return 1 indicating success.
+ */
 int _env(simple_shell_d *simpdata)
 {
-    int i, j;
+    char **env_var = simpdata->_environ;
 
-    for (i = 0; simpdata->_environ[i]; i++)
+    while (*env_var != NULL)
     {
-
-        for (j = 0; simpdata->_environ[i][j]; j++)
-            ;
-
-        write(STDOUT_FILENO, simpdata->_environ[i], j);
-        write(STDOUT_FILENO, "\n", 1);
+        printf("%s\n", *env_var);
+        env_var++;
     }
+
     simpdata->status = 0;
 
-    return (1);
+    return 1;
 }
 
 /**
