@@ -69,56 +69,76 @@ void shell_loop(simple_shell_d *simpdata)
 }
 
 /**
- * @brief Removes comments from the input string.
+ * @brief Removes comments from the main_input string.
  *
- * Removes comments from the input string 'in'. If a '#' character
- * is encountered, the function removes the comment and trims any
- * trailing whitespace before the comment.
+ * Removes comments from the main_input string 'in'. If a '#'
+ * character is encountered,
+ * the function truncates the string up to the '#' character
+ * If the '#' is the first character, the entire
+ * string is freed, and NULL is returned.
  *
- * @param in Pointer to the input string.
- * @return Pointer to the modified string without comments.
+ * @param in Pointer to the main_input string.
+ * @return Pointer to the modified string without comments
+ * NULL if the entire string is a comment.
  */
 char *without_comment(char *in)
 {
-    int i = 0;
-    int j;
-    int commentIndex = -1;
-    /* Allocate memory for the result string*/
-    char *result = (char *)malloc((commentIndex + 1) * sizeof(char));
+    size_t result_index = 0;
+    size_t length = strlen(in);
+    size_t result_length = 0;
+    size_t iterations;
 
-    if (in == NULL || *in == '\0')
-        return in; /* Nothing to do if the input is empty*/
-
-    for (i = 0; in[i]; i++)
+    if (in == NULL || in[0] == '\0')
     {
-        if (in[i] == '#' && (i == 0 || in[i - 1] == ' ' || in[i - 1] == '\t' || in[i - 1] == ';'))
+        return NULL; /* Input is NULL or empty*/
+    }
+
+    /* Pass 1: Calculate the length of the result string*/
+    for (iterations = 0; iterations < length; iterations++)
+    {
+        if (in[iterations] == '#' && (iterations == 0 || in[iterations - 1] == ' ' || in[iterations - 1] == '\t' || in[iterations - 1] == ';'))
         {
-            /* Find the index of the first '#' character*/
-            commentIndex = i;
-            break;
+            /* Found a comment, skip until the end of the line*/
+            while (iterations < length && in[iterations] != '\n')
+            {
+                iterations++;
+            }
+        }
+        else
+        {
+            result_length++;
         }
     }
 
-    if (commentIndex != -1)
+    if (result_length == 0)
     {
-        /* Trim trailing whitespace before the comment*/
-        while (commentIndex > 0 && (in[commentIndex - 1] == ' ' || in[commentIndex - 1] == '\t'))
-            commentIndex--;
-
-        if (result == NULL)
-        {
-            perror("Memory allocation error");
-            exit(EXIT_FAILURE);
-        }
-
-        /* Copy the non-comment part to the result string*/
-        for (j = 0; j < commentIndex; j++)
-            result[j] = in[j];
-
-        result[commentIndex] = '\0'; /* Null-terminate the result string*/
-        free(in);                    /* Free the original string*/
-        return result;
+        /* The entire string is a comment*/
+        free(in);
+        return NULL;
     }
 
-    return in; /* No comment found, return the original string*/
+    /* Pass 2: Copy non-comment characters to the beginning of the input string*/
+    for (iterations = 0; iterations < length; iterations++)
+    {
+        if (in[iterations] == '#' && (iterations == 0 || in[iterations - 1] == ' ' || in[iterations - 1] == '\t' || in[iterations - 1] == ';'))
+        {
+            /* Found a comment, skip until the end of the line*/
+            while (iterations < length && in[iterations] != '\n')
+            {
+                iterations++;
+            }
+        }
+        else
+        {
+            in[result_index++] = in[iterations];
+        }
+    }
+
+    /* Null-terminate the modified input string*/
+    in[result_index] = '\0';
+
+    /* Reallocate memory to fit the new length*/
+    in = realloc(in, result_index + 1);
+
+    return in;
 }
