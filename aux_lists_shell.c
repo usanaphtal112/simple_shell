@@ -22,13 +22,13 @@ void separation_list(sep_list **head)
 }
 
 /**
- * f_list - Frees the memory allocated for line_list.
- * @head: Pointer to the head of the line_list.
+ * f_list - Frees the memory allocated for LineList_Var.
+ * @head: Pointer to the head of the LineList_Var.
  */
-void f_list(line_list **head)
+void f_list(LineList_Var **head)
 {
-    line_list *temp;
-    line_list *curr;
+    LineList_Var *temp;
+    LineList_Var *curr;
 
     if (head != NULL)
     {
@@ -43,17 +43,17 @@ void f_list(line_list **head)
 }
 
 /**
- * line_list_node - Adds a new node with line at the end of line_list.
- * @head: Pointer to the head of the line_list.
+ * LineList_Var_node - Adds a new node with line at the end of LineList_Var.
+ * @head: Pointer to the head of the LineList_Var.
  * @line: Pointer to the line string to be added to the new node.
  *
- * Return: Pointer to the modified line_list.
+ * Return: Pointer to the modified LineList_Var.
  */
-line_list *line_list_node(line_list **head, char *line)
+LineList_Var *LineList_Var_node(LineList_Var **head, char *line)
 {
-    line_list *new, *temp;
+    LineList_Var *new, *temp;
 
-    new = malloc(sizeof(line_list));
+    new = malloc(sizeof(LineList_Var));
     if (new == NULL)
         return (NULL);
 

@@ -33,17 +33,17 @@ var_n *variable_node(var_n **head, int lvar, char *val, int lval)
 */
 
 /**
- * free_rvar_list - Frees the memory allocated for the r_var linked list.
+ * free_rvar_list - Frees the memory allocated for the read_variable linked list.
  *
- * The free_rvar_list function takes a pointer to the head of the r_var linked
+ * The free_rvar_list function takes a pointer to the head of the read_variable linked
  * list and frees the memory allocated for each node in the list.
  *
- * @head: A pointer to the head of the r_var linked list.
+ * @head: A pointer to the head of the read_variable linked list.
  */
-void free_rvar_list(r_var **head)
+void free_rvar_list(read_variable **head)
 {
-    r_var *temp;
-    r_var *curr;
+    read_variable *temp;
+    read_variable *curr;
 
     if (head != NULL)
     {
@@ -58,24 +58,24 @@ void free_rvar_list(r_var **head)
 }
 
 /**
- * variable_addition - Adds a node to the r_var linked list.
+ * variable_addition - Adds a node to the read_variable linked list.
  *
  * The variable_addition function creates a new node with the specified values
- * and appends it to the end of the r_var linked list. If the list is empty,
+ * and appends it to the end of the read_variable linked list. If the list is empty,
  * it initializes the list with the new node.
  *
- * @head: A pointer to the head of the r_var linked list.
+ * @head: A pointer to the head of the read_variable linked list.
  * @lvar: The length of the variable name.
  * @val: The value associated with the variable.
  * @lval: The length of the value.
  *
- * Return: A pointer to the head of the modified r_var linked list.
+ * Return: A pointer to the head of the modified read_variable linked list.
  */
-r_var *variable_addition(r_var **head, int lvar, char *val, int lval)
+read_variable *variable_addition(read_variable **head, int lvar, char *val, int lval)
 {
-    r_var *new, *temp;
+    read_variable *new, *temp;
 
-    new = malloc(sizeof(r_var));
+    new = malloc(sizeof(read_variable));
     if (new == NULL)
         return (NULL);
 

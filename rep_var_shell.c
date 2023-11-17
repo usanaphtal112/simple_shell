@@ -14,7 +14,7 @@
  * @param data Pointer to the simple_shell_d struct.
  * @return The length of the checked string.
  */
-int check_vars(r_var **h, char *in, char *st, simple_shell_d *data)
+int check_vars(read_variable **h, char *in, char *st, simple_shell_d *data)
 {
     int i, lst, lpd;
 
@@ -59,7 +59,7 @@ int check_vars(r_var **h, char *in, char *st, simple_shell_d *data)
  * @param data Pointer to the simple_shell_d struct.
  * @return No return value.
  */
-void check_env(r_var **h, char *in, simple_shell_d *data)
+void check_env(read_variable **h, char *in, simple_shell_d *data)
 {
     int row, chr, j, lval;
     char **_envr;
@@ -105,7 +105,7 @@ void check_env(r_var **h, char *in, simple_shell_d *data)
  */
 char *rep_var(char *main_input, simple_shell_d *simpdata)
 {
-    r_var *head, *indx;
+    read_variable *head, *indx;
     char *status, *new_input;
     int olen, nlen;
 
@@ -155,9 +155,9 @@ char *rep_var(char *main_input, simple_shell_d *simpdata)
  * @param nlen The length of the new string.
  * @return Pointer to the new string with variables replaced.
  */
-char *replaced_input(r_var **head, char *main_input, char *new_input, int nlen)
+char *replaced_input(read_variable **head, char *main_input, char *new_input, int nlen)
 {
-    r_var *indx;
+    read_variable *indx;
     int i, j, k;
 
     indx = *head;

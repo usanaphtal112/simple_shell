@@ -13,7 +13,7 @@
  */
 void shell_loop(simple_shell_d *simpdata)
 {
-    int i_eof;
+    int endOfFileCondition;
     char *main_input;
     int syntax_error;
     int loop;
@@ -24,10 +24,10 @@ void shell_loop(simple_shell_d *simpdata)
         write(STDIN_FILENO, "^-^ ", 4);
 
         /* Read input*/
-        main_input = read_line(&i_eof);
+        main_input = r_LineNode(&endOfFileCondition);
 
         /* Check for EOF*/
-        if (i_eof != -1)
+        if (endOfFileCondition != -1)
         {
             /* Process input*/
             main_input = without_comment(main_input);
@@ -47,7 +47,7 @@ void shell_loop(simple_shell_d *simpdata)
             main_input = rep_var(main_input, simpdata);
 
             /* Execute commands*/
-            loop = split_commands(simpdata, main_input);
+            loop = shellSplitCmd(simpdata, main_input);
 
             /* Update counter*/
             simpdata->counter += 1;

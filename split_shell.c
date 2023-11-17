@@ -104,10 +104,10 @@ char **split_line(char *main_input)
  * @param simpdata Pointer to the simple_shell_d struct.
  * @return No return value.
  */
-void go_next(sep_list **list_s, line_list **list_l, simple_shell_d *simpdata)
+void go_next(sep_list **list_s, LineList_Var **list_l, simple_shell_d *simpdata)
 {
     sep_list *ls_s = *list_s;
-    line_list *ls_l = *list_l;
+    LineList_Var *ls_l = *list_l;
 
     while (ls_s != NULL)
     {
@@ -140,20 +140,20 @@ void go_next(sep_list **list_s, line_list **list_l, simple_shell_d *simpdata)
  * @param main_input Pointer to the main_input string.
  * @return 0 if the loop should terminate, 1 otherwise.
  */
-int split_commands(simple_shell_d *simpdata, char *main_input)
+int shellSplitCmd(simple_shell_d *simpdata, char *main_input)
 {
 
+    LineList_Var *head_l, *list_l;
     sep_list *head_s, *list_s;
-    line_list *head_l, *list_l;
     int loop;
-
-    head_s = NULL;
     head_l = NULL;
+    head_s = NULL;
+
+    list_l = head_l;
 
     add_nodes(&head_s, &head_l, main_input);
 
     list_s = head_s;
-    list_l = head_l;
 
     while (list_l != NULL)
     {
@@ -192,10 +192,11 @@ int split_commands(simple_shell_d *simpdata, char *main_input)
  * @param main_input Pointer to the main_input string.
  * @return No return value.
  */
-void add_nodes(sep_list **head_s, line_list **head_l, char *main_input)
+void add_nodes(sep_list **head_s, LineList_Var **head_l, char *main_input)
 {
     char *token;
     char *rest = main_input;
+    rest = main_input;
 
     swap_char(main_input, 0);
 
@@ -205,12 +206,10 @@ void add_nodes(sep_list **head_s, line_list **head_l, char *main_input)
         rest = NULL;
     }
 
-    rest = main_input;
-
     while ((token = _strtok(rest, ";|&")) != NULL)
     {
         swap_char(token, 1);
-        line_list_node(head_l, token);
+        LineList_Var_node(head_l, token);
         rest = NULL;
     }
 }
