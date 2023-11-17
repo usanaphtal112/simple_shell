@@ -49,15 +49,29 @@ void set_data(simple_shell_d *simpdata, char **av)
  */
 void free_data(simple_shell_d *simpdata)
 {
-    unsigned int i;
-
-    for (i = 0; simpdata->_environ[i]; i++)
+    if (simpdata == NULL)
     {
-        free(simpdata->_environ[i]);
+        return; /* Check for NULL pointer to avoid undefined behavior*/
     }
 
-    free(simpdata->_environ);
-    free(simpdata->pid);
+    /* Free the _environ array*/
+    if (simpdata->_environ != NULL)
+    {
+        unsigned int i;
+        for (i = 0; simpdata->_environ[i] != NULL; i++)
+        {
+            free(simpdata->_environ[i]);
+        }
+        free(simpdata->_environ);
+        simpdata->_environ = NULL;
+    }
+
+    /* Free the pid string*/
+    if (simpdata->pid != NULL)
+    {
+        free(simpdata->pid);
+        simpdata->pid = NULL;
+    }
 }
 
 /**
@@ -86,4 +100,3 @@ int main(int ac, char **av)
         return (255);
     return (simpdata.status);
 }
-

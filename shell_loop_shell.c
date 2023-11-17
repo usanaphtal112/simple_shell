@@ -1,10 +1,10 @@
 #include "shell.h"
 
 /**
- * @brief Shell loop for continuous main_input and command execution.
+ * @brief Shell loop for continuous input and command execution.
  *
  * The main loop for the shell, continuously prompts
- * the user for main_input, reads the main_input,
+ * the user for input, reads the input,
  * removes comments, checks for syntax errors
  * replaces variables, and executes commands.
  *
@@ -13,36 +13,58 @@
  */
 void shell_loop(simple_shell_d *simpdata)
 {
-    int loop, i_eof;
+    int i_eof;
     char *main_input;
+    int syntax_error;
+    int loop;
 
-    loop = 1;
-    while (loop == 1)
+    while (1)
     {
+        /* Display prompt*/
         write(STDIN_FILENO, "^-^ ", 4);
+
+        /* Read input*/
         main_input = read_line(&i_eof);
+
+        /* Check for EOF*/
         if (i_eof != -1)
         {
+            /* Process input*/
             main_input = without_comment(main_input);
             if (main_input == NULL)
                 continue;
 
-            if (check_syntax_error(simpdata, main_input) == 1)
+            /* Check syntax errors*/
+            syntax_error = check_syntax_error(simpdata, main_input);
+            if (syntax_error == 1)
             {
                 simpdata->status = 2;
                 free(main_input);
                 continue;
             }
+
+            /* Replace variables*/
             main_input = rep_var(main_input, simpdata);
+
+            /* Execute commands*/
             loop = split_commands(simpdata, main_input);
+
+            /* Update counter*/
             simpdata->counter += 1;
+
+            /* Free allocated memory*/
             free(main_input);
         }
         else
         {
-            loop = 0;
+            /* Handle EOF*/
             free(main_input);
+            break;
         }
+
+        /* Check loop condition*/
+        if (loop == 0)
+            break;
     }
 }
 
