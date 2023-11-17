@@ -84,6 +84,8 @@ int _strncmp(const char *str1, const char *str2, size_t n)
     return *(unsigned char *)str1 - *(unsigned char *)str2;
 }
 
+#include <string.h>
+
 /**
  * @brief Gets the value of an environment variable by name.
  *
@@ -93,16 +95,20 @@ int _strncmp(const char *str1, const char *str2, size_t n)
  */
 char *_getenv(const char *name, char **_environ)
 {
-    int i;
-    int name_len = _strlen(name);
+    size_t name_len = strlen(name);
+    char **env_var;
 
-    for (i = 0; _environ[i]; i++)
+    /* Iterate through the environment variables*/
+    for (env_var = _environ; *env_var != NULL; env_var++)
     {
-        if (_strncmp(_environ[i], name, name_len) == 0 && _environ[i][name_len] == '=')
+        /* Check if the current environment variable matches the specified name*/
+        if (strncmp(*env_var, name, name_len) == 0 && (*env_var)[name_len] == '=')
         {
-            return _environ[i] + name_len + 1;
+            /* Return the value part of the environment variable*/
+            return *env_var + name_len + 1;
         }
     }
 
+    /* Environment variable not found*/
     return NULL;
 }
