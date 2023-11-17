@@ -111,41 +111,29 @@ int cmd_exec(simple_shell_d *simpdata)
  */
 int is_executable(simple_shell_d *simpdata)
 {
+    char *main_input = simpdata->args[0];
+    /* Check for the presence of a '/' in the command*/
+    char *slash_position = strchr(main_input, '/');
     struct stat st;
-    int i;
-    char *main_input;
 
-    main_input = simpdata->args[0];
-    for (i = 0; main_input[i]; i++)
+    if (slash_position != NULL)
     {
-        if (main_input[i] == '.')
+        /* Check if the command contains ".."*/
+        if (strstr(main_input, "..") != NULL)
         {
-            if (main_input[i + 1] == '.')
-                return (0);
-            if (main_input[i + 1] == '/')
-                continue;
-            else
-                break;
+            return 0;
         }
-        else if (main_input[i] == '/' && i != 0)
-        {
-            if (main_input[i + 1] == '.')
-                continue;
-            i++;
-            break;
-        }
-        else
-            break;
-    }
-    if (i == 0)
-        return (0);
 
-    if (stat(main_input + i, &st) == 0)
-    {
-        return (i);
+        /* Check if the command is a valid executable*/
+        if (stat(main_input, &st) == 0 && S_ISREG(st.st_mode) && access(main_input, X_OK) == 0)
+        {
+            return (int)(slash_position - main_input);
+        }
     }
+
+    /* Command is not executable*/
     get_error(simpdata, 127);
-    return (-1);
+    return -1;
 }
 
 /**
