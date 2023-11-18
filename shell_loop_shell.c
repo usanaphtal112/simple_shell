@@ -8,137 +8,82 @@
  * removes comments, checks for syntax errors
  * replaces variables, and executes commands.
  *
- * @param simpdata Pointer to the simple_shell_d struct.
+ * @param datash Pointer to the simple_shell_d struct.
  * @return No return value.
  */
-void shell_loop(simple_shell_d *simpdata)
+void shell_loop(simple_shell_d *datash)
 {
-    int endOfFileCondition;
-    char *main_input;
-    int syntax_error;
-    int loop;
+    int loop, i_eof;
+    char *input;
 
-    while (1)
+    loop = 1;
+    while (loop == 1)
     {
-        /* Display prompt*/
         write(STDIN_FILENO, "^-^ ", 4);
-
-        /* Read input*/
-        main_input = r_LineNode(&endOfFileCondition);
-
-        /* Check for EOF*/
-        if (endOfFileCondition != -1)
+        input = read_line(&i_eof);
+        if (i_eof != -1)
         {
-            /* Process input*/
-            main_input = without_comment(main_input);
-            if (main_input == NULL)
+            input = without_comment(input);
+            if (input == NULL)
                 continue;
 
-            /* Check syntax errors*/
-            syntax_error = check_syntax_error(simpdata, main_input);
-            if (syntax_error == 1)
+            if (check_syntax_error(datash, input) == 1)
             {
-                simpdata->status = 2;
-                free(main_input);
+                datash->status = 2;
+                free(input);
                 continue;
             }
-
-            /* Replace variables*/
-            main_input = rep_var(main_input, simpdata);
-
-            /* Execute commands*/
-            loop = shellSplitCmd(simpdata, main_input);
-
-            /* Update counter*/
-            simpdata->counter += 1;
-
-            /* Free allocated memory*/
-            free(main_input);
+            input = rep_var(input, datash);
+            loop = split_commands(datash, input);
+            datash->counter += 1;
+            free(input);
         }
         else
         {
-            /* Handle EOF*/
-            free(main_input);
-            break;
+            loop = 0;
+            free(input);
         }
-
-        /* Check loop condition*/
-        if (loop == 0)
-            break;
     }
 }
 
 /**
- * @brief Removes comments from the main_input string.
+ * @brief Removes comments from the input string.
  *
- * Removes comments from the main_input string 'in'. If a '#'
+ * Removes comments from the input string 'in'. If a '#'
  * character is encountered,
  * the function truncates the string up to the '#' character
  * If the '#' is the first character, the entire
  * string is freed, and NULL is returned.
  *
- * @param in Pointer to the main_input string.
+ * @param in Pointer to the input string.
  * @return Pointer to the modified string without comments
  * NULL if the entire string is a comment.
  */
 char *without_comment(char *in)
 {
-    size_t result_index = 0;
-    size_t length = strlen(in);
-    size_t result_length = 0;
-    size_t iterations;
+    int i, up_to;
 
-    if (in == NULL || in[0] == '\0')
+    up_to = 0;
+    for (i = 0; in[i]; i++)
     {
-        return NULL; /* Input is NULL or empty*/
-    }
-
-    /* Pass 1: Calculate the length of the result string*/
-    for (iterations = 0; iterations < length; iterations++)
-    {
-        if (in[iterations] == '#' && (iterations == 0 || in[iterations - 1] == ' ' || in[iterations - 1] == '\t' || in[iterations - 1] == ';'))
+        if (in[i] == '#')
         {
-            /* Found a comment, skip until the end of the line*/
-            while (iterations < length && in[iterations] != '\n')
+            if (i == 0)
             {
-                iterations++;
+                free(in);
+                return (NULL);
             }
-        }
-        else
-        {
-            result_length++;
+
+            if (in[i - 1] == ' ' || in[i - 1] == '\t' || in[i - 1] == ';')
+                up_to = i;
         }
     }
 
-    if (result_length == 0)
+    if (up_to != 0)
     {
-        /* The entire string is a comment*/
-        free(in);
-        return NULL;
+        in = _realloc(in, i, up_to + 1);
+        in[up_to] = '\0';
     }
 
-    /* Pass 2: Copy non-comment characters to the beginning of the input string*/
-    for (iterations = 0; iterations < length; iterations++)
-    {
-        if (in[iterations] == '#' && (iterations == 0 || in[iterations - 1] == ' ' || in[iterations - 1] == '\t' || in[iterations - 1] == ';'))
-        {
-            /* Found a comment, skip until the end of the line*/
-            while (iterations < length && in[iterations] != '\n')
-            {
-                iterations++;
-            }
-        }
-        else
-        {
-            in[result_index++] = in[iterations];
-        }
-    }
-
-    /* Null-terminate the modified input string*/
-    in[result_index] = '\0';
-
-    /* Reallocate memory to fit the new length*/
-    in = realloc(in, result_index + 1);
-
-    return in;
+    return (in);
 }

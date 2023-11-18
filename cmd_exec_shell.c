@@ -54,85 +54,98 @@ char *_which(char *cmd, char **_environ)
 /**
  * @brief Executes a command in a new process using fork and execve.
  *
- * @param simpdata Pointer to the data structure containing shell information.
+ * @param datash Pointer to the data structure containing shell information.
  * @return 1 if the command was executed successfully, 0 otherwise.
  */
-int cmd_exec(simple_shell_d *simpdata)
+int cmd_exec(simple_shell_d *datash)
 {
-    int exec = is_executable(simpdata);
+    pid_t pd;
+    pid_t wpd;
+    int state;
+    int exec;
     char *dir;
-    pid_t pd = fork();
+    (void)wpd;
 
+    exec = is_executable(datash);
     if (exec == -1)
-    {
-        return 1;
-    }
-
+        return (1);
     if (exec == 0)
     {
-        dir = _which(simpdata->args[0], simpdata->_environ);
-        if (check_error_cmd(dir, simpdata) == 1)
-        {
-            return 1;
-        }
-    }
-    else
-    {
-        dir = simpdata->args[0];
+        dir = _which(datash->args[0], datash->_environ);
+        if (check_error_cmd(dir, datash) == 1)
+            return (1);
     }
 
-    if (pd == -1)
+    pd = fork();
+    if (pd == 0)
     {
-        perror(simpdata->av[0]);
-        return 1;
+        if (exec == 0)
+            dir = _which(datash->args[0], datash->_environ);
+        else
+            dir = datash->args[0];
+        execve(dir + exec, datash->args, datash->_environ);
     }
-    else if (pd == 0)
+    else if (pd < 0)
     {
-        execve(dir + exec, simpdata->args, simpdata->_environ);
-        perror(simpdata->av[0]);
-        exit(EXIT_FAILURE);
+        perror(datash->av[0]);
+        return (1);
     }
     else
     {
-        int state;
-        waitpid(pd, &state, 0);
-        simpdata->status = WIFEXITED(state) ? WEXITSTATUS(state) : 1;
-        return 1;
+        do
+        {
+            wpd = waitpid(pd, &state, WUNTRACED);
+        } while (!WIFEXITED(state) && !WIFSIGNALED(state));
     }
+
+    datash->status = state / 256;
+    return (1);
 }
 
 /**
  * @brief Checks if a command is executable and sets
  * the appropriate error if not.
  *
- * @param simpdata Pointer to the data structure containing shell information.
+ * @param datash Pointer to the data structure containing shell information.
  * @return The length of the executable part of the command if executable, -1.
  */
-int is_executable(simple_shell_d *simpdata)
+int is_executable(simple_shell_d *datash)
 {
-    char *main_input = simpdata->args[0];
-    /* Check for the presence of a '/' in the command*/
-    char *slash_position = strchr(main_input, '/');
     struct stat st;
+    int i;
+    char *input;
 
-    if (slash_position != NULL)
+    input = datash->args[0];
+    for (i = 0; input[i]; i++)
     {
-        /* Check if the command contains ".."*/
-        if (strstr(main_input, "..") != NULL)
+        if (input[i] == '.')
         {
-            return 0;
+            if (input[i + 1] == '.')
+                return (0);
+            if (input[i + 1] == '/')
+                continue;
+            else
+                break;
         }
-
-        /* Check if the command is a valid executable*/
-        if (stat(main_input, &st) == 0 && S_ISREG(st.st_mode) && access(main_input, X_OK) == 0)
+        else if (input[i] == '/' && i != 0)
         {
-            return (int)(slash_position - main_input);
+            if (input[i + 1] == '.')
+                continue;
+            i++;
+            break;
         }
+        else
+            break;
     }
+    if (i == 0)
+        return (0);
 
-    /* Command is not executable*/
-    get_error(simpdata, 127);
-    return -1;
+    if (stat(input + i, &st) == 0)
+    {
+        return (i);
+    }
+    get_error(datash, 127);
+    return (-1);
 }
 
 /**
@@ -140,22 +153,22 @@ int is_executable(simple_shell_d *simpdata)
  * such as command not found or lack of execution permission.
  *
  * @param dir The directory path of the command.
- * @param simpdata Pointer to the data structure
+ * @param datash Pointer to the data structure
  * @return 1 if there is an error, 0 otherwise.
  */
-int check_error_cmd(char *dir, simple_shell_d *simpdata)
+int check_error_cmd(char *dir, simple_shell_d *datash)
 {
     if (dir == NULL)
     {
-        get_error(simpdata, 127);
+        get_error(datash, 127);
         return (1);
     }
 
-    if (_strcmp(simpdata->args[0], dir) != 0)
+    if (_strcmp(datash->args[0], dir) != 0)
     {
         if (access(dir, X_OK) == -1)
         {
-            get_error(simpdata, 126);
+            get_error(datash, 126);
             free(dir);
             return (1);
         }
@@ -163,9 +176,9 @@ int check_error_cmd(char *dir, simple_shell_d *simpdata)
     }
     else
     {
-        if (access(simpdata->args[0], X_OK) == -1)
+        if (access(datash->args[0], X_OK) == -1)
         {
-            get_error(simpdata, 126);
+            get_error(datash, 126);
             return (1);
         }
     }

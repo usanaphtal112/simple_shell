@@ -2,14 +2,14 @@
 
 /**
  * cd_to_home - Change the current working directory.
- * @simpdata: Pointer to the simple_shell_d structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function changes the current working directory
  * It updates the environment variables PWD and OLDPWD accordingly.
  * If the home directory is not found, it sets the appropriate error code.
  */
 
-void cd_to_home(simple_shell_d *simpdata)
+void cd_to_home(simple_shell_d *datash)
 {
     char *p_pwd, *home;
     char pwd[PATH_MAX];
@@ -17,73 +17,73 @@ void cd_to_home(simple_shell_d *simpdata)
     getcwd(pwd, sizeof(pwd));
     p_pwd = _strdup(pwd);
 
-    home = _getenv("HOME", simpdata->_environ);
+    home = _getenv("HOME", datash->_environ);
 
     if (home == NULL)
     {
-        set_env("OLDPWD", p_pwd, simpdata);
+        set_env("OLDPWD", p_pwd, datash);
         free(p_pwd);
         return;
     }
 
     if (chdir(home) == -1)
     {
-        get_error(simpdata, 2);
+        get_error(datash, 2);
         free(p_pwd);
         return;
     }
 
-    set_env("OLDPWD", p_pwd, simpdata);
-    set_env("PWD", home, simpdata);
+    set_env("OLDPWD", p_pwd, datash);
+    set_env("PWD", home, datash);
     free(p_pwd);
-    simpdata->status = 0;
+    datash->status = 0;
 }
 
 /**
  * cd_to - Change the current working directory to the specified directory.
- * @simpdata: Pointer to the simple_shell_d structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function changes the current working directory
  * It updates the environment variables PWD and OLDPWD accordingly.
  * If the specified directory is invalid, it sets the appropriate error code.
  */
-void cd_to(simple_shell_d *simpdata)
+void cd_to(simple_shell_d *datash)
 {
     char pwd[PATH_MAX];
     char *dir, *cp_pwd, *cp_dir;
 
     getcwd(pwd, sizeof(pwd));
 
-    dir = simpdata->args[1];
+    dir = datash->args[1];
     if (chdir(dir) == -1)
     {
-        get_error(simpdata, 2);
+        get_error(datash, 2);
         return;
     }
 
     cp_pwd = _strdup(pwd);
-    set_env("OLDPWD", cp_pwd, simpdata);
+    set_env("OLDPWD", cp_pwd, datash);
 
     cp_dir = _strdup(dir);
-    set_env("PWD", cp_dir, simpdata);
+    set_env("PWD", cp_dir, datash);
 
     free(cp_pwd);
     free(cp_dir);
 
-    simpdata->status = 0;
+    datash->status = 0;
 
     chdir(dir);
 }
 
 /**
  * cd_previous - Change the current working directory
- * @simpdata: Pointer to the simple_shell_d structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function changes the current working directory.
  * and updates the environment variables PWD and OLDPWD accordingly.
  * It also prints the new current directory to the standard output.
  */
-void cd_previous(simple_shell_d *simpdata)
+void cd_previous(simple_shell_d *datash)
 {
     char pwd[PATH_MAX];
     char *p_pwd, *p_oldpwd, *cp_pwd, *cp_oldpwd;
@@ -91,21 +91,21 @@ void cd_previous(simple_shell_d *simpdata)
     getcwd(pwd, sizeof(pwd));
     cp_pwd = _strdup(pwd);
 
-    p_oldpwd = _getenv("OLDPWD", simpdata->_environ);
+    p_oldpwd = _getenv("OLDPWD", datash->_environ);
 
     if (p_oldpwd == NULL)
         cp_oldpwd = cp_pwd;
     else
         cp_oldpwd = _strdup(p_oldpwd);
 
-    set_env("OLDPWD", cp_pwd, simpdata);
+    set_env("OLDPWD", cp_pwd, datash);
 
     if (chdir(cp_oldpwd) == -1)
-        set_env("PWD", cp_pwd, simpdata);
+        set_env("PWD", cp_pwd, datash);
     else
-        set_env("PWD", cp_oldpwd, simpdata);
+        set_env("PWD", cp_oldpwd, datash);
 
-    p_pwd = _getenv("PWD", simpdata->_environ);
+    p_pwd = _getenv("PWD", datash->_environ);
 
     write(STDOUT_FILENO, p_pwd, _strlen(p_pwd));
     write(STDOUT_FILENO, "\n", 1);
@@ -114,7 +114,7 @@ void cd_previous(simple_shell_d *simpdata)
     if (p_oldpwd)
         free(cp_oldpwd);
 
-    simpdata->status = 0;
+    datash->status = 0;
 
     chdir(p_pwd);
 }
@@ -122,24 +122,24 @@ void cd_previous(simple_shell_d *simpdata)
 /**
  * cd_dot - Change the current working directory to
  * the specified directory or stay in the current directory.
- * @simpdata: Pointer to the simple_shell_d structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function changes the current working directory
  * or remains in the current directory if the specified directory is "." or "/"
  * It updates the environment variables PWD and OLDPWD accordingly.
  */
-void cd_dot(simple_shell_d *simpdata)
+void cd_dot(simple_shell_d *datash)
 {
     char pwd[PATH_MAX];
     char *dir, *cp_pwd, *cp_strtok_pwd;
 
     getcwd(pwd, sizeof(pwd));
     cp_pwd = _strdup(pwd);
-    set_env("OLDPWD", cp_pwd, simpdata);
-    dir = simpdata->args[1];
+    set_env("OLDPWD", cp_pwd, datash);
+    dir = datash->args[1];
     if (_strcmp(".", dir) == 0)
     {
-        set_env("PWD", cp_pwd, simpdata);
+        set_env("PWD", cp_pwd, datash);
         free(cp_pwd);
         return;
     }
@@ -161,13 +161,13 @@ void cd_dot(simple_shell_d *simpdata)
     if (cp_strtok_pwd != NULL)
     {
         chdir(cp_strtok_pwd);
-        set_env("PWD", cp_strtok_pwd, simpdata);
+        set_env("PWD", cp_strtok_pwd, datash);
     }
     else
     {
         chdir("/");
-        set_env("PWD", "/", simpdata);
+        set_env("PWD", "/", datash);
     }
-    simpdata->status = 0;
+    datash->status = 0;
     free(cp_pwd);
 }

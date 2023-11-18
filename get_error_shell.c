@@ -1,34 +1,42 @@
 #include "shell.h"
 
 /**
- * @brief Generate and display an error message based on the evaluation code.
+ * get_error - Generate and display an error message
+ * based on the evaluation code.
+ * @datash: Pointer to the simple_shell_d structure.
+ * @eval: Evaluation code indicating the type of error.
  *
- * This function generates an error message based on the provided evaluation code
- * and displays it on the standard error output. The evaluation code corresponds
- * to specific error scenarios, such as environment-related errors,
+ * This function generates an error message based
+ *  on the provided evaluation code and displays it on the
+ * standard error output. The evaluation code corresponds
+ * to specific error scenarios, such as environment-related errors
  * permission denied, command not found, and exit shell errors.
- * The resulting error message is dynamically allocated and should be freed by the caller.
+ * The resulting error message is dynamically
+ * allocated and should be freed by the caller.
  *
- * @param simpdata Pointer to the simple_shell_d structure.
- * @param eval Evaluation code indicating the type of error.
- * @return The provided evaluation code.
+ * @return: The provided evaluation code.
  */
-int get_error(simple_shell_d *simpdata, int eval)
+int get_error(simple_shell_d *datash, int eval)
 {
-    char *error = NULL;
+    char *error;
 
-    if (eval == -1)
-        error = error_env(simpdata);
-    else if (eval == 126)
-        error = error_path_126(simpdata);
-    else if (eval == 127)
-        error = error_not_found(simpdata);
-    else if (eval == 2)
+    switch (eval)
     {
-        if (_strcmp("exit", simpdata->args[0]) == 0)
-            error = error_exit_shell(simpdata);
-        else if (_strcmp("cd", simpdata->args[0]) == 0)
-            error = error_get_cd(simpdata);
+    case -1:
+        error = error_env(datash);
+        break;
+    case 126:
+        error = error_path_126(datash);
+        break;
+    case 127:
+        error = error_not_found(datash);
+        break;
+    case 2:
+        if (_strcmp("exit", datash->args[0]) == 0)
+            error = error_exit_shell(datash);
+        else if (_strcmp("cd", datash->args[0]) == 0)
+            error = error_get_cd(datash);
+        break;
     }
 
     if (error)
@@ -37,6 +45,6 @@ int get_error(simple_shell_d *simpdata, int eval)
         free(error);
     }
 
-    simpdata->status = eval;
-    return eval;
+    datash->status = eval;
+    return (eval);
 }

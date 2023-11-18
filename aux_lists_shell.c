@@ -1,10 +1,10 @@
 #include "shell.h"
 
 /**
- * separation_list - Frees the memory allocated for sep_list.
+ * free_sep_list - Frees the memory allocated for sep_list.
  * @head: Pointer to the head of the sep_list.
  */
-void separation_list(sep_list **head)
+void free_sep_list(sep_list **head)
 {
     sep_list *temp;
     sep_list *curr;
@@ -22,13 +22,13 @@ void separation_list(sep_list **head)
 }
 
 /**
- * f_list - Frees the memory allocated for LineList_Var.
- * @head: Pointer to the head of the LineList_Var.
+ * free_line_list - Frees the memory allocated for line_list.
+ * @head: Pointer to the head of the line_list.
  */
-void f_list(LineList_Var **head)
+void free_line_list(line_list **head)
 {
-    LineList_Var *temp;
-    LineList_Var *curr;
+    line_list *temp;
+    line_list *curr;
 
     if (head != NULL)
     {
@@ -43,17 +43,17 @@ void f_list(LineList_Var **head)
 }
 
 /**
- * LineList_Var_node - Adds a new node with line at the end of LineList_Var.
- * @head: Pointer to the head of the LineList_Var.
+ * add_line_node_end - Adds a new node with line at the end of line_list.
+ * @head: Pointer to the head of the line_list.
  * @line: Pointer to the line string to be added to the new node.
  *
- * Return: Pointer to the modified LineList_Var.
+ * Return: Pointer to the modified line_list.
  */
-LineList_Var *LineList_Var_node(LineList_Var **head, char *line)
+line_list *add_line_node_end(line_list **head, char *line)
 {
-    LineList_Var *new, *temp;
+    line_list *new, *temp;
 
-    new = malloc(sizeof(LineList_Var));
+    new = malloc(sizeof(line_list));
     if (new == NULL)
         return (NULL);
 
@@ -76,13 +76,13 @@ LineList_Var *LineList_Var_node(LineList_Var **head, char *line)
 }
 
 /**
- * add_separation_end - Adds a new node with separator at the end of sep_list.
+ * add_sep_node_end - Adds a new node with separator at the end of sep_list.
  * @head: Pointer to the head of the sep_list.
  * @sep: Separator character to be added to the new node.
  *
  * Return: Pointer to the modified sep_list.
  */
-sep_list *add_separation_end(sep_list **head, char sep)
+sep_list *add_sep_node_end(sep_list **head, char sep)
 {
     sep_list *new, *temp;
 

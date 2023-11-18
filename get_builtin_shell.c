@@ -18,7 +18,7 @@ int (*get_builtin(char *cmd))(simple_shell_d *)
         {"exit", exit_shell},
         {"setenv", _setenv},
         {"unsetenv", _unsetenv},
-	{ "cd", cd_shell },
+        {"cd", cd_shell},
         {"help", get_help},
         {NULL, NULL}};
     int i;
@@ -29,5 +29,5 @@ int (*get_builtin(char *cmd))(simple_shell_d *)
             break;
     }
 
-    return (builtin[i].function);
+    return (builtin[i].f);
 }

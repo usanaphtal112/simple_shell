@@ -2,76 +2,58 @@
 
 /**
  * set_data - Initialize the simple_shell_d structure with necessary information.
- * @simpdata: Pointer to the simple_shell_d structure.
+ * @datash: Pointer to the simple_shell_d structure.
  * @av: Array of strings containing the program arguments.
  *
  * This function initializes the simple_shell_d structure with information needed
- * for the shell's operation. It sets various fields such as av, main_input, args,
+ * for the shell's operation. It sets various fields such as av, input, args,
  * status, counter, _environ, and pid. The _environ array is populated with
  * environment variables, and the pid field is set to the current process ID.
  */
-void set_data(simple_shell_d *simpdata, char **av)
+void set_data(simple_shell_d *datash, char **av)
 {
     unsigned int i;
-    unsigned int env_count = 0;
 
-    simpdata->av = av;
-    simpdata->main_input = NULL;
-    simpdata->args = NULL;
-    simpdata->status = 0;
-    simpdata->counter = 1;
+    datash->av = av;
+    datash->input = NULL;
+    datash->args = NULL;
+    datash->status = 0;
+    datash->counter = 1;
 
-    /* Count the number of environment variables*/
-    while (environ[env_count])
+    for (i = 0; environ[i]; i++)
+        ;
+
+    datash->_environ = malloc(sizeof(char *) * (i + 1));
+
+    for (i = 0; environ[i]; i++)
     {
-        env_count++;
+        datash->_environ[i] = _strdup(environ[i]);
     }
 
-    /* Allocate memory for _environ array */
-    simpdata->_environ = (char **)malloc(sizeof(char *) * (env_count + 1));
-    for (i = 0; i < env_count; i++)
-    {
-        simpdata->_environ[i] = _strdup(environ[i]);
-    }
-
-    simpdata->_environ[env_count] = NULL;
-    simpdata->pid = aux_itoa(getpid());
+    datash->_environ[i] = NULL;
+    datash->pid = aux_itoa(getpid());
 }
 
 /**
  * free_data - Free allocated memory in the simple_shell_d structure.
- * @simpdata: Pointer to the simple_shell_d structure.
+ * @datash: Pointer to the simple_shell_d structure.
  *
  * This function frees the dynamically allocated memory within the simple_shell_d
  * structure, including the _environ array and the pid string. It iterates
  * through the _environ array and frees each string element. After freeing the
  * memory, the pointers are set to NULL to avoid potential use-after-free.
  */
-void free_data(simple_shell_d *simpdata)
+void free_data(simple_shell_d *datash)
 {
-    if (simpdata == NULL)
+    unsigned int i;
+
+    for (i = 0; datash->_environ[i]; i++)
     {
-        return; /* Check for NULL pointer to avoid undefined behavior*/
+        free(datash->_environ[i]);
     }
 
-    /* Free the _environ array*/
-    if (simpdata->_environ != NULL)
-    {
-        unsigned int i;
-        for (i = 0; simpdata->_environ[i] != NULL; i++)
-        {
-            free(simpdata->_environ[i]);
-        }
-        free(simpdata->_environ);
-        simpdata->_environ = NULL;
-    }
-
-    /* Free the pid string*/
-    if (simpdata->pid != NULL)
-    {
-        free(simpdata->pid);
-        simpdata->pid = NULL;
-    }
+    free(datash->_environ);
+    free(datash->pid);
 }
 
 /**
@@ -89,14 +71,14 @@ void free_data(simple_shell_d *simpdata)
 
 int main(int ac, char **av)
 {
-    simple_shell_d simpdata;
+    simple_shell_d datash;
     (void)ac;
 
     signal(SIGINT, get_sigint);
-    set_data(&simpdata, av);
-    shell_loop(&simpdata);
-    free_data(&simpdata);
-    if (simpdata.status < 0)
+    set_data(&datash, av);
+    shell_loop(&datash);
+    free_data(&datash);
+    if (datash.status < 0)
         return (255);
-    return (simpdata.status);
+    return (datash.status);
 }

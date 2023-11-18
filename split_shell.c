@@ -1,68 +1,73 @@
 #include "shell.h"
 
 /**
- * @brief Swaps special characters in the main_input string representation.
+ * @brief Swaps special characters in the input string representation.
  *
- * Swaps '|' and '&' characters in the main_input -
- * string 'main_input' with their internal
+ * Swaps '|' and '&' characters in the input -
+ * string 'input' with their internal
  * representations (ASCII 16 and 12, respectively).
  * If 'bool' is 0, swaps the characters;
  * if 'bool' is 1, swaps them back to their original form.
  *
- * @param main_input Pointer to the main_input string.
+ * @param input Pointer to the input string.
  * @param bool Flag indicating whether to swap or revert the characters.
- * @return Pointer to the modified main_input string.
+ * @return Pointer to the modified input string.
  */
-char *swap_char(char *main_input, int bool)
+char *swap_char(char *input, int bool)
 {
-    char swap_map[2][2] = {{'|', 16}, {'&', 12}};
+    int i;
 
-    int i, j;
-
-    for (i = 0; main_input[i]; i++)
+    if (bool == 0)
     {
-        for (j = 0; j < 2; j++)
+        for (i = 0; input[i]; i++)
         {
-            if (bool == 0 && main_input[i] == swap_map[j][0])
+            if (input[i] == '|')
             {
-                if (main_input[i + 1] != swap_map[j][0])
-                {
-                    main_input[i] = swap_map[j][1];
-                    if (swap_map[j][1] == 16)
-                        i++;
-                }
+                if (input[i + 1] != '|')
+                    input[i] = 16;
                 else
                     i++;
             }
-            else if (bool == 1 && main_input[i] == swap_map[j][1])
+
+            if (input[i] == '&')
             {
-                main_input[i] = swap_map[j][0];
+                if (input[i + 1] != '&')
+                    input[i] = 12;
+                else
+                    i++;
             }
         }
     }
-
-    return main_input;
+    else
+    {
+        for (i = 0; input[i]; i++)
+        {
+            input[i] = (input[i] == 16 ? '|' : input[i]);
+            input[i] = (input[i] == 12 ? '&' : input[i]);
+        }
+    }
+    return (input);
 }
 
 /**
  * @brief Splits a string into tokens based on a delimiter.
  *
- * Splits the main_input string 'main_input' into tokens
- * using the delimiter defined by 'TOKEN_DELIM'.
+ * Splits the input string 'input' into tokens
+ * using the delimiter defined by 'TOK_DELIM'.
  * Allocates memory dynamically for the tokens
  * returns a pointer to the resulting array.
  *
- * @param main_input Pointer to the main_input string.
+ * @param input Pointer to the input string.
  * @return Pointer to the array of tokens.
  */
-char **split_line(char *main_input)
+char **split_line(char *input)
 {
     size_t bsize;
     size_t i;
     char **tokens;
     char *token;
 
-    bsize = TOKEN_READ_BUF_SIZE;
+    bsize = TOK_BUFSIZE;
     tokens = malloc(sizeof(char *) * (bsize));
     if (tokens == NULL)
     {
@@ -70,14 +75,14 @@ char **split_line(char *main_input)
         exit(EXIT_FAILURE);
     }
 
-    token = _strtok(main_input, TOKEN_DELIM);
+    token = _strtok(input, TOK_DELIM);
     tokens[0] = token;
 
     for (i = 1; token != NULL; i++)
     {
         if (i == bsize)
         {
-            bsize += TOKEN_READ_BUF_SIZE;
+            bsize += TOK_BUFSIZE;
             tokens = _reallocdp(tokens, i, sizeof(char *) * bsize);
             if (tokens == NULL)
             {
@@ -85,7 +90,7 @@ char **split_line(char *main_input)
                 exit(EXIT_FAILURE);
             }
         }
-        token = _strtok(NULL, TOKEN_DELIM);
+        token = _strtok(NULL, TOK_DELIM);
         tokens[i] = token;
     }
 
@@ -97,82 +102,91 @@ char **split_line(char *main_input)
  *
  * Moves to the next nodes in the separator linked
  * list ('list_s') and line linked list ('list_l')
- * based on the current state of the shell represented by 'simpdata'.
+ * based on the current state of the shell represented by 'datash'.
  *
  * @param list_s Pointer to the separator linked list.
  * @param list_l Pointer to the line linked list.
- * @param simpdata Pointer to the simple_shell_d struct.
+ * @param datash Pointer to the simple_shell_d struct.
  * @return No return value.
  */
-void go_next(sep_list **list_s, LineList_Var **list_l, simple_shell_d *simpdata)
+void go_next(sep_list **list_s, line_list **list_l, simple_shell_d *datash)
 {
-    sep_list *ls_s = *list_s;
-    LineList_Var *ls_l = *list_l;
+    int loop_sep;
+    sep_list *ls_s;
+    line_list *ls_l;
 
-    while (ls_s != NULL)
+    loop_sep = 1;
+    ls_s = *list_s;
+    ls_l = *list_l;
+
+    while (ls_s != NULL && loop_sep)
     {
-        if ((simpdata->status == 0 && (ls_s->separator == '&' || ls_s->separator == ';')) ||
-            (simpdata->status == 1 && (ls_s->separator == '|' || ls_s->separator == ';')))
+        if (datash->status == 0)
         {
-            break;
+            if (ls_s->separator == '&' || ls_s->separator == ';')
+                loop_sep = 0;
+            if (ls_s->separator == '|')
+                ls_l = ls_l->next, ls_s = ls_s->next;
         }
-
-        if ((simpdata->status == 0 && ls_s->separator == '|') ||
-            (simpdata->status == 1 && ls_s->separator == '&'))
+        else
         {
-            ls_l = ls_l->next;
+            if (ls_s->separator == '|' || ls_s->separator == ';')
+                loop_sep = 0;
+            if (ls_s->separator == '&')
+                ls_l = ls_l->next, ls_s = ls_s->next;
         }
-
-        ls_s = ls_s->next;
+        if (ls_s != NULL && !loop_sep)
+            ls_s = ls_s->next;
     }
 
     *list_s = ls_s;
     *list_l = ls_l;
 }
+
 /**
  * @brief Splits and executes commands based on separators and operators.
  *
- * Splits the main_input string into lines and executes
+ * Splits the input string into lines and executes
  * commands based on separators and operators.
  * Uses linked lists for separators and lines to manage the command structure.
  *
- * @param simpdata Pointer to the simple_shell_d struct.
- * @param main_input Pointer to the main_input string.
+ * @param datash Pointer to the simple_shell_d struct.
+ * @param input Pointer to the input string.
  * @return 0 if the loop should terminate, 1 otherwise.
  */
-int shellSplitCmd(simple_shell_d *simpdata, char *main_input)
+int split_commands(simple_shell_d *datash, char *input)
 {
 
-    LineList_Var *head_l, *list_l;
     sep_list *head_s, *list_s;
+    line_list *head_l, *list_l;
     int loop;
-    head_l = NULL;
+
     head_s = NULL;
+    head_l = NULL;
 
-    list_l = head_l;
-
-    add_nodes(&head_s, &head_l, main_input);
+    add_nodes(&head_s, &head_l, input);
 
     list_s = head_s;
+    list_l = head_l;
 
     while (list_l != NULL)
     {
-        simpdata->main_input = list_l->line;
-        simpdata->args = split_line(simpdata->main_input);
-        loop = exec_line(simpdata);
-        free(simpdata->args);
+        datash->input = list_l->line;
+        datash->args = split_line(datash->input);
+        loop = exec_line(datash);
+        free(datash->args);
 
         if (loop == 0)
             break;
 
-        go_next(&list_s, &list_l, simpdata);
+        go_next(&list_s, &list_l, datash);
 
         if (list_l != NULL)
             list_l = list_l->next;
     }
 
-    separation_list(&head_s);
-    f_list(&head_l);
+    free_sep_list(&head_s);
+    free_line_list(&head_l);
 
     if (loop == 0)
         return (0);
@@ -182,34 +196,40 @@ int shellSplitCmd(simple_shell_d *simpdata, char *main_input)
 /**
  * @brief Adds separator and line nodes to their respective linked lists.
  *
- * Modifies the main_input string 'main_input' by swapping
+ * Modifies the input string 'input' by swapping
  * special characters and adds separator
  * nodes to the 'head_s' linked list and line
  * nodes to the 'head_l' linked list.
  *
  * @param head_s Pointer to the head of the separator linked list.
  * @param head_l Pointer to the head of the line linked list.
- * @param main_input Pointer to the main_input string.
+ * @param input Pointer to the input string.
  * @return No return value.
  */
-void add_nodes(sep_list **head_s, LineList_Var **head_l, char *main_input)
+void add_nodes(sep_list **head_s, line_list **head_l, char *input)
 {
-    char *token;
-    char *rest = main_input;
-    rest = main_input;
+    int i;
+    char *line;
 
-    swap_char(main_input, 0);
+    input = swap_char(input, 0);
 
-    while ((token = _strtok(rest, ";|&")) != NULL)
+    for (i = 0; input[i]; i++)
     {
-        add_separation_end(head_s, token[0]);
-        rest = NULL;
+        if (input[i] == ';')
+            add_sep_node_end(head_s, input[i]);
+
+        if (input[i] == '|' || input[i] == '&')
+        {
+            add_sep_node_end(head_s, input[i]);
+            i++;
+        }
     }
 
-    while ((token = _strtok(rest, ";|&")) != NULL)
+    line = _strtok(input, ";|&");
+    do
     {
-        swap_char(token, 1);
-        LineList_Var_node(head_l, token);
-        rest = NULL;
-    }
+        line = swap_char(line, 1);
+        add_line_node_end(head_l, line);
+        line = _strtok(NULL, ";|&");
+    } while (line != NULL);
 }
